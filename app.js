@@ -272,7 +272,7 @@ async function addToAnki(btn) {
           Back: stripHtml(card.a),
         },
         options: { allowDuplicate: false },
-        tags: ["folhinha-master", `dia-${curDay + 1}`],
+        tags: ["folhinha", `dia-${curDay + 1}`],
       },
     });
     btn.classList.add("ok");
