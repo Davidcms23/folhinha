@@ -19,10 +19,11 @@ function save() {
 /* ── Grid ────────────────────────────────────────────── */
 function renderGrid() {
   const grid = document.getElementById("days-grid");
+  if (!grid) return;
   grid.innerHTML = "";
 
   for (let i = 0; i < TOTAL_DAYS; i++) {
-    const day = DAYS[i] || null;
+    const day = typeof DAYS !== "undefined" && DAYS[i] ? DAYS[i] : null;
     const isDone = done.includes(i);
     const isActive = curDay === i;
     const isLocked = !day;
@@ -77,9 +78,12 @@ function updateProgress() {
   const pct = Math.round((n / TOTAL_DAYS) * 100);
   const dayNo = Math.min(n + 1, TOTAL_DAYS);
 
-  document.getElementById("prog-label").textContent =
-    `Overall progress: Day ${dayNo} of ${TOTAL_DAYS}`;
-  document.getElementById("prog-fill").style.width = pct + "%";
+  // Adicionado Null-Check: Impede travamento caso os elementos não existam na página (ex: página do baralho)
+  const progLabel = document.getElementById("prog-label");
+  const progFill = document.getElementById("prog-fill");
+
+  if (progLabel) progLabel.textContent = `Overall progress: Day ${dayNo} of ${TOTAL_DAYS}`;
+  if (progFill) progFill.style.width = pct + "%";
 }
 
 /* ── Open a day ──────────────────────────────────────── */
@@ -149,8 +153,47 @@ function flashBtn(btn) {
   }, 1400);
 }
 
+// NOVO: Função de Fallback para uso local (file://)
+function fallbackCopyTextToClipboard(text, btn) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+
+  // Impede scroll indesejado ao criar o textarea
+  textArea.style.top = "-9999px";
+  textArea.style.left = "-9999px";
+  textArea.style.position = "fixed";
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      flashBtn(btn);
+    } else {
+      console.error("Falha ao copiar usando execCommand");
+    }
+  } catch (err) {
+    console.error("Erro ao executar fallback de cópia", err);
+  }
+
+  document.body.removeChild(textArea);
+}
+
 function copyToClipboard(text, btn) {
-  navigator.clipboard.writeText(text).then(() => flashBtn(btn));
+  // Tenta usar a API moderna (requer HTTPS ou Localhost)
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => flashBtn(btn))
+      .catch((err) => {
+        console.warn("Clipboard API bloqueada, tentando fallback...", err);
+        fallbackCopyTextToClipboard(text, btn);
+      });
+  } else {
+    // Se o protocolo for file:// ou ambiente inseguro, cai direto no fallback
+    fallbackCopyTextToClipboard(text, btn);
+  }
 }
 
 function copyFront(btn) {

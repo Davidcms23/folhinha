@@ -3,73 +3,43 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>FMaster - Sobre</title>
+        <title>folhinha::sobre</title>
         <link rel="stylesheet" href="../style.css" />
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="Principal">
-            <a href="/" class="nav-brand">
-                <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 100 120"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <text
-                        x="55"
-                        y="95"
-                        text-anchor="middle"
-                        font-size="115"
-                        font-family="Georgia, serif"
-                        fill="#4A90D9"
-                    >
-                        &#x2211 <!-- Somatorio -->
-                    </text>
-                </svg>
-                FMaster
-                <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 100 120"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <text
-                        x="55"
-                        y="95"
-                        text-anchor="middle"
-                        font-size="115"
-                        font-family="Georgia, serif"
-                        fill="#4A90D9"
-                    >
-                        &#x222B <!-- Integral -->
-                    </text>
-                </svg>
-            </a>
-            <div class="nav-links">
-                <a href="../" class="nav-link">Início</a>
-                <a href="../baralho/" class="nav-link">Baralho</a>
-                <a href="../sobre/" class="nav-link active">Sobre</a>
+            <div class="navbar-inner">
+                <a href="../" class="nav-brand">
+                    folhinha
+                </a>
+                <div class="nav-links">
+                    <a href="../" class="nav-link">[início]</a>
+                    <a href="../baralho/" class="nav-link">[baralho]</a>
+                    <a href="../sobre/" class="nav-link active">[sobre]</a>
+                </div>
             </div>
         </nav>
 
         <main class="main">
-            <h1 class="page-title" style="margin-bottom: 20px">
-                Sobre o projeto
-            </h1>
+            <p class="breadcrumb">~/fmaster/sobre$cat README.md</p>
 
-            <div style="font-size: 15px; line-height: 1.8; color: var(--text)">
-                Ajudar a lembrar de forma concreta algumas formulas importantes
-                de probabilidade.
-            </div>
+            <h1 class="page-title">Sobre o projeto</h1>
+
+            <p>
+                Ajudar a lembrar de forma concreta algumas fórmulas
+                importantes de probabilidade.
+            </p>
         </main>
 
-        <footer class="site-footer">
-            <p>
-                Repository
-                <a href="https://github.com/" target="_blank" rel="noopener"
-                    >GitHub</a
-                >
-            </p>
-        </footer>
+        <!-- ── Footer ───────────────────────────────── -->
+    <footer class="site-footer">
+        <p>
+            Repository
+            <a href="https://github.com/" target="_blank" rel="noopener"
+                >GitHub</a
+            >
+        </p>
+    </footer>
+
     </body>
 </html>

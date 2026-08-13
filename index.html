@@ -3,146 +3,45 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>FMaster - Início</title>
+        <title>FMaster::início</title>
         <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+        <script src="md-loader.js" defer></script>
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="Principal">
-            <a href="/" class="nav-brand">
-                <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 100 120"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <text
-                        x="55"
-                        y="95"
-                        text-anchor="middle"
-                        font-size="115"
-                        font-family="Georgia, serif"
-                        fill="#4A90D9"
-                    >
-                        &#x2211;
-                    </text>
-                </svg>
-                FMaster
-                <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 100 120"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    <text
-                        x="55"
-                        y="95"
-                        text-anchor="middle"
-                        font-size="115"
-                        font-family="Georgia, serif"
-                        fill="#4A90D9"
-                    >
-                        &#x2211;
-                    </text>
-                </svg>
-            </a>
-            <div class="nav-links">
-                <a href="./" class="nav-link active">Início</a>
-                <a href="baralho/" class="nav-link">Baralho</a>
-                <a href="sobre/" class="nav-link">Sobre</a>
+            <div class="navbar-inner">
+                <a href="/" class="nav-brand">
+                    folhinha
+                </a>
+                <div class="nav-links">
+                    <a href="./" class="nav-link active">[início]</a>
+                    <a href="baralho/" class="nav-link">[baralho]</a>
+                    <a href="sobre/" class="nav-link">[sobre]</a>
+                </div>
             </div>
         </nav>
 
-        <main class="main">
-            <h1 class="page-title">Como funciona a memória</h1>
+        <main class="page-layout">
+            <div class="main-col">
+                <p class="breadcrumb">~/fmaster$cat memoria.md</p>
 
-            <p>
-                Antes de começar a criar o seu baralho, é importante que você
-                entenda como funciona a sua memória, os motivos de você ter
-                "brancos" nas provas e como o uso da técnica da repetição
-                espaçada pode ajudar na hora de fazer exercícios, provas e
-                também nos momentos em que o professor faz perguntas para a
-                turma e fica aquele silêncio constrangedor.
-            </p>
+                <div id="content" data-md="index.md">
+                    <p class="md-loading">carregando conteúdo&hellip;</p>
+                </div>
+            </div>
 
-            <p>
-                Antes de sair explicando assuntos que não domino, é importante
-                que você saiba de onde tirei as informações que estarei
-                apresentando a seguir. Primeiro, e mais importante, o livro
-                <cite>
-                    <a
-                        href="https://www.google.com.br/books/edition/Ci%C3%AAncia_Psicol%C3%B3gica/8HE3DwAAQBAJ?hl=pt-BR&gbpv=1&dq=Ciencia+Psicologica&printsec=frontcover"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        Ciência Psicológica
-                    </a> </cite
-                >, de Gazzaniga. Conheci essa obra por meio de um episódio do
-                Naruhodô. Na verdade, a maioria dos livros e artigos que utilizo
-                conheci por meio de episódios do podcast.
-            </p>
-
-            <p>
-                As demais obras que usei como referência foram:
-                <cite
-                    ><a
-                        href="https://www.google.com.br/books/edition/Mem%C3%B3ria_3_ed/nIJXDwAAQBAJ?hl=pt-BR&gbpv=1&dq=Ivan+Izquierdo+Memoria&printsec=frontcover"
-                        target="_blank"
-                        rel="noopener"
-                        >Memória</a
-                    ></cite
-                >, de Ivan Izquierdo;
-                <cite
-                    ><a
-                        href="https://www.google.com.br/books/edition/Princ%C3%ADpios_de_Neuroci%C3%AAncias/wnjJEAAAQBAJ?hl=pt-BR&gbpv=1&dq=Principios+de+Neurociencias,+Eric+Kandel&printsec=frontcover"
-                        target="_blank"
-                        rel="noopener"
-                        >Princípios de Neurociências</a
-                    ></cite
-                >, de Eric Kandel; e
-                <cite
-                    ><a
-                        href="https://www.google.com.br/books/edition/Manual_de_Psicologia_Cognitiva_7_Ed/n2pEDgAAQBAJ?hl=pt-BR&gbpv=1&dq=Manual+de+Psicologia+Cognitiva,+Eysenck&printsec=frontcover"
-                        target="_blank"
-                        rel="noopener"
-                        >Manual de Psicologia Cognitiva</a
-                    ></cite
-                >, de Michael Eysenck.
-            </p>
-
-            <p>
-                No texto a seguir, irei referenciar adequadamente todas as
-                informações apresentadas. Começarei explicando o que é a memória
-                de trabalho e, em seguida, a memória de longo prazo. Depois,
-                discutirei o que a memória tem a ver com os estudos (às vezes o
-                óbvio precisa ser dito). Logo após, explicarei como funciona o
-                método da repetição espaçada e como criar boas redes de
-                associação. Por fim, falarei sobre o Anki, como utilizá-lo e
-                encerrarei com algumas advertências e precauções que você deve
-                tomar.
-            </p>
-
-            <h2 class="section-title">Memória de trabalho</h2>
-
-            <h2 class="section-title">Memória de longo prazo</h2>
-
-            <h2 class="section-title">Memória e estudos</h2>
-
-            <h2 class="section-title">Repetição espaçada</h2>
-
-            <h2 class="section-title">Anki</h2>
-
-            <h3 class="subsection-title">Como utilizar</h3>
-
-            <h3 class="subsection-title">Advertências e precauções</h3>
+            <aside class="toc" aria-label="Estrutura do documento">
+                <p class="toc-label">estrutura</p>
+                <nav id="toc-nav"></nav>
+            </aside>
         </main>
 
         <footer class="site-footer">
             <p>
-                Repository
-                <a href="https://github.com/" target="_blank" rel="noopener"
-                    >GitHub</a
-                >
+                FMaster // <a href="https://github.com/Davidcms23/folhinha-master" target="_blank" rel="noopener">repositório</a> // renderizado a partir de <code>index.md</code>
             </p>
         </footer>
+
     </body>
 </html>
