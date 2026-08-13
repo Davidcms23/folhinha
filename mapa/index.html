@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>folhinha::mapa</title>
+        <link rel="stylesheet" href="../style.css" />
+        <script src="https://d3js.org/d3.v7.min.js" defer></script>
+        <script>
+            window.MathJax = {
+                tex: { inlineMath: [["\\(", "\\)"]], displayMath: [["\\[", "\\]"]] },
+                startup: { ready() { MathJax.startup.defaultReady(); } },
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+
+        <style>
+            body { overflow: hidden; margin: 0; }
+            .navbar { position: relative; z-index: 10; }
+
+            .map-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: transparent;
+                z-index: 1;
+            }
+
+            /* Nós (Bolinhas e Nomes) */
+            .node {
+                transition: opacity 0.3s ease;
+            }
+            .node circle {
+                fill: #58a6ff;
+                stroke: #c9d1d9;
+                stroke-width: 1.5px;
+                transition: fill 0.2s, filter 0.2s;
+                cursor: pointer;
+            }
+            .node circle:hover {
+                fill: #79c0ff;
+                filter: drop-shadow(0 0 8px #58a6ff);
+            }
+            .node text {
+                fill: #c9d1d9;
+                font-family: monospace;
+                font-size: 13px;
+                pointer-events: none;
+                text-shadow: 0px 2px 4px #0d1117;
+            }
+
+            /* Linhas base estáticas (fio apagado) */
+            .link-base {
+                stroke: #30363d;
+                stroke-opacity: 0.8;
+                stroke-width: 2px;
+                fill: none;
+                transition: opacity 0.3s ease;
+            }
+
+            /* Corrente de energia sutil (Visível apenas no hover) */
+            .link-energy {
+                stroke: #79c0ff;
+                stroke-width: 2px;
+                stroke-dasharray: 4, 12;
+                stroke-linecap: round;
+                fill: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                animation: energy-flow 0.6s linear infinite;
+                filter: drop-shadow(0 0 3px #58a6ff);
+                pointer-events: none;
+            }
+
+            @keyframes energy-flow {
+                to { stroke-dashoffset: -16; }
+            }
+
+            /* Linha guia perpendicular (tether) da aresta ao rótulo */
+            .label-tether {
+                stroke: #c9d1d9;
+                stroke-width: 1px;
+                stroke-dasharray: 2, 4;
+                opacity: 0.4;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            /* Labels (Fórmulas renderizadas pelo MathJax no ForeignObject) */
+            .foreign-label {
+                pointer-events: none;
+                overflow: visible;
+                transition: opacity 0.3s ease;
+            }
+            .foreign-label div {
+                color: #8b949e;
+                font-family: monospace;
+                font-size: 12px;
+                text-align: center;
+                background: rgba(13, 17, 23, 0.7);
+                padding: 2px 6px;
+                border-radius: 4px;
+                display: inline-block;
+            }
+
+            /* Tooltip e tipografia expandida */
+            .tooltip {
+                position: absolute;
+                background-color: rgba(13, 17, 23, 0.95);
+                border: 1px solid #30363d;
+                border-radius: 6px;
+                padding: 16px;
+                color: #c9d1d9;
+                font-size: 14px;
+                pointer-events: none;
+                opacity: 0;
+                z-index: 100;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+                backdrop-filter: blur(4px);
+                transition: opacity 0.1s ease-out;
+            }
+            .tooltip-title {
+                font-weight: bold;
+                border-bottom: 1px solid #30363d;
+                padding-bottom: 5px;
+                margin-bottom: 5px;
+                color: #58a6ff;
+            }
+            .tooltip-sup {
+                font-size: 0.85em;
+                color: #8b949e;
+                margin-bottom: 8px;
+                border-bottom: 1px solid #30363d;
+                padding-bottom: 6px;
+            }
+            .tooltip-math {
+                margin: 6px 0;
+                font-size: 0.95em;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar" role="navigation">
+            <div class="navbar-inner">
+                <a href="../" class="nav-brand"><span class="prompt">~/folhinha</span></a>
+                <div class="nav-links">
+                    <a href="../" class="nav-link">[início]</a>
+                    <a href="../baralho/" class="nav-link">[baralho]</a>
+                    <a href="../mapa/" class="nav-link active">[mapa]</a>
+                    <a href="../sobre/" class="nav-link">[sobre]</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="map-container" id="grafo"></div>
+        <div id="tooltip" class="tooltip"></div>
+
+        <script src="app.js" defer></script>
+    </body>
+</html>
