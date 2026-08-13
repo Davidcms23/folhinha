@@ -10,9 +10,14 @@ const DAYS = [
         raw: "f(x) = x^{a-1}(1-x)^{b-1}/B(a,b)",
       },
       {
-        q: "Esperança e Variância da \\(Beta(a,b)\\)",
-        a: "\\[\\mathbb{E}(X)=\\frac{a}{a+b}\\quad\\text{Var}(X)=\\frac{ab}{(a+b)^2(a+b+1)}\\]",
-        raw: "E(X)=a/(a+b), Var(X)=ab/(a+b)^2(a+b+1)",
+        q: "Valor esperado da \\(Beta(a,b)\\)",
+        a: "\\[\\mathbb{E}(X)=\\frac{a}{a+b}\\]",
+        raw: "E(X)=a/(a+b)",
+      },
+      {
+        q: "Variância da \\(Beta(a,b)\\)",
+        a: "\\[\\text{Var}(X)=\\frac{ab}{(a+b)^2(a+b+1)}\\]",
+        raw: "Var(X)=ab/(a+b)^2(a+b+1)",
       },
       {
         q: "Momento de ordem \\(k\\) da \\(Beta(a,b)\\)",
