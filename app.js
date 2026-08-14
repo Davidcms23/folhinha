@@ -48,7 +48,7 @@ function renderGrid() {
 
     const numEl = document.createElement("div");
     numEl.className = "dc-num" + (isDone ? " done-mark" : "");
-    numEl.textContent = `Day ${i + 1}`;
+    numEl.textContent = `Dia ${i + 1}`;
 
     const labelEl = document.createElement("div");
     labelEl.className = "dc-label";
@@ -82,7 +82,7 @@ function updateProgress() {
   const progLabel = document.getElementById("prog-label");
   const progFill = document.getElementById("prog-fill");
 
-  if (progLabel) progLabel.textContent = `Overall progress: Day ${dayNo} of ${TOTAL_DAYS}`;
+  if (progLabel) progLabel.textContent = `Overall progress: Dia ${dayNo} of ${TOTAL_DAYS}`;
   if (progFill) progFill.style.width = pct + "%";
 }
 

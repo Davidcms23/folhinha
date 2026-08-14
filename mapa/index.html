@@ -15,6 +15,12 @@
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
 
         <style>
+            /* --- SCROLLBARS DISCRETAS --- */
+            ::-webkit-scrollbar { width: 4px; height: 4px; }
+            ::-webkit-scrollbar-track { background: transparent; }
+            ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+            ::-webkit-scrollbar-thumb:hover { background: #58a6ff; }
+
             body { overflow: hidden; margin: 0; }
             .navbar { position: relative; z-index: 10; }
 
@@ -28,21 +34,32 @@
                 z-index: 1;
             }
 
-            /* Nós (Bolinhas e Nomes) */
-            .node {
-                transition: opacity 0.3s ease;
-            }
-            .node circle {
+            .node { transition: opacity 0.3s ease; }
+
+            .node circle.circle-continua {
                 fill: #58a6ff;
                 stroke: #c9d1d9;
                 stroke-width: 1.5px;
                 transition: fill 0.2s, filter 0.2s;
                 cursor: pointer;
             }
-            .node circle:hover {
+            .node circle.circle-continua:hover {
                 fill: #79c0ff;
                 filter: drop-shadow(0 0 8px #58a6ff);
             }
+
+            .node circle.circle-discreta {
+                fill: #3fb950;
+                stroke: #c9d1d9;
+                stroke-width: 1.5px;
+                transition: fill 0.2s, filter 0.2s;
+                cursor: pointer;
+            }
+            .node circle.circle-discreta:hover {
+                fill: #56d364;
+                filter: drop-shadow(0 0 8px #3fb950);
+            }
+
             .node text {
                 fill: #c9d1d9;
                 font-family: monospace;
@@ -51,7 +68,6 @@
                 text-shadow: 0px 2px 4px #0d1117;
             }
 
-            /* Linhas base estáticas (fio apagado) */
             .link-base {
                 stroke: #30363d;
                 stroke-opacity: 0.8;
@@ -60,7 +76,6 @@
                 transition: opacity 0.3s ease;
             }
 
-            /* Corrente de energia sutil (Visível apenas no hover) */
             .link-energy {
                 stroke: #79c0ff;
                 stroke-width: 2px;
@@ -74,11 +89,8 @@
                 pointer-events: none;
             }
 
-            @keyframes energy-flow {
-                to { stroke-dashoffset: -16; }
-            }
+            @keyframes energy-flow { to { stroke-dashoffset: -16; } }
 
-            /* Linha guia perpendicular (tether) da aresta ao rótulo */
             .label-tether {
                 stroke: #c9d1d9;
                 stroke-width: 1px;
@@ -88,7 +100,6 @@
                 transition: opacity 0.3s ease;
             }
 
-            /* Labels (Fórmulas renderizadas pelo MathJax no ForeignObject) */
             .foreign-label {
                 pointer-events: none;
                 overflow: visible;
@@ -105,13 +116,13 @@
                 display: inline-block;
             }
 
-            /* Tooltip e tipografia expandida */
+            /* Bloco flutuante compacto */
             .tooltip {
                 position: absolute;
                 background-color: rgba(13, 17, 23, 0.95);
                 border: 1px solid #30363d;
                 border-radius: 6px;
-                padding: 16px;
+                padding: 12px;
                 color: #c9d1d9;
                 font-size: 14px;
                 pointer-events: none;
@@ -128,16 +139,83 @@
                 margin-bottom: 5px;
                 color: #58a6ff;
             }
-            .tooltip-sup {
-                font-size: 0.85em;
-                color: #8b949e;
-                margin-bottom: 8px;
-                border-bottom: 1px solid #30363d;
-                padding-bottom: 6px;
-            }
             .tooltip-math {
                 margin: 6px 0;
-                font-size: 0.95em;
+                font-size: 0.85em; /* Fonte reduzida */
+            }
+
+            /* --- PAINEL LATERAL --- */
+            .side-panel {
+                position: fixed;
+                top: 0;
+                right: -450px;
+                width: 420px;
+                height: 100vh;
+                background-color: rgba(13, 17, 23, 0.85);
+                border-left: 1px solid #30363d;
+                box-shadow: -4px 0 20px rgba(0,0,0,0.6);
+                backdrop-filter: blur(10px);
+                transition: right 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                z-index: 50;
+                padding: 80px 25px 20px 25px;
+                overflow-y: auto;
+                color: #c9d1d9;
+                box-sizing: border-box;
+            }
+            .side-panel.open { right: 0; }
+
+            .panel-close {
+                position: absolute;
+                top: 70px;
+                right: 20px;
+                background: none;
+                border: none;
+                color: #8b949e;
+                font-size: 28px;
+                cursor: pointer;
+            }
+            .panel-close:hover { color: #c9d1d9; }
+
+            .panel-title {
+                font-size: 22px;
+                font-weight: bold;
+                color: #58a6ff;
+                margin-bottom: 10px;
+                border-bottom: 1px solid #30363d;
+                padding-bottom: 10px;
+            }
+
+            .panel-content {
+                margin-top: 20px;
+                line-height: 1.6;
+            }
+
+            /* Container das fórmulas do painel lateral */
+            .math-display {
+                font-size: 0.85em; /* Fonte reduzida */
+                margin-bottom: 6px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                padding-bottom: 4px;
+            }
+
+            /* Área para futuro Plot Interativo */
+            .plot-container {
+                width: 100%;
+                height: 250px;
+                background: rgba(0,0,0,0.3);
+                border: 1px dashed #30363d;
+                border-radius: 6px;
+                margin-top: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #8b949e;
+                font-family: monospace;
+                font-size: 13px;
+                text-align: center;
+                padding: 20px;
+                box-sizing: border-box;
             }
         </style>
     </head>
@@ -157,6 +235,19 @@
         <div class="map-container" id="grafo"></div>
         <div id="tooltip" class="tooltip"></div>
 
+        <!-- Estrutura do Painel Lateral -->
+        <aside class="side-panel" id="side-panel">
+            <button class="panel-close" id="close-panel" aria-label="Fechar painel">&times;</button>
+            <div class="panel-title" id="panel-title">Distribuição</div>
+            <div class="panel-content" id="panel-content">
+                <!-- Conteúdo dinâmico injetado via painel.js -->
+            </div>
+            <div class="plot-container" id="plot-container">
+                [ Área do gráfico interativo ]<br><br>Pode ser acoplado via Plotly.js ou JSXGraph futuramente.
+            </div>
+        </aside>
+
+        <script src="painel.js" defer></script>
         <script src="app.js" defer></script>
     </body>
 </html>
