@@ -141,7 +141,7 @@
             }
             .tooltip-math {
                 margin: 6px 0;
-                font-size: 0.85em; /* Fonte reduzida */
+                font-size: 0.85em;
             }
 
             /* --- PAINEL LATERAL --- */
@@ -192,30 +192,67 @@
 
             /* Container das fórmulas do painel lateral */
             .math-display {
-                font-size: 0.85em; /* Fonte reduzida */
+                font-size: 0.85em;
                 margin-bottom: 6px;
                 overflow-x: auto;
                 overflow-y: hidden;
                 padding-bottom: 4px;
             }
 
-            /* Área para futuro Plot Interativo */
+            /* --- ÁREA DO GRÁFICO INTERATIVO (Limpa de bordas inúteis) --- */
             .plot-container {
                 width: 100%;
-                height: 250px;
+                margin-top: 15px;
+                padding-bottom: 30px;
+                box-sizing: border-box;
+            }
+            .plot-wrapper {
                 background: rgba(0,0,0,0.3);
-                border: 1px dashed #30363d;
+                border: 1px solid #30363d;
                 border-radius: 6px;
-                margin-top: 30px;
+                padding: 15px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .plot-area {
+                width: 100%;
+                height: 220px;
+            }
+            .plot-controls {
+                margin-top: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .control-group {
                 display: flex;
                 align-items: center;
-                justify-content: center;
-                color: #8b949e;
-                font-family: monospace;
-                font-size: 13px;
+                justify-content: space-between;
+                font-size: 14px;
+                color: #c9d1d9;
+            }
+            .control-group input[type="range"] {
+                flex-grow: 1;
+                margin: 0 10px;
+                accent-color: #58a6ff;
+            }
+            .control-group input[type="number"] {
+                width: 65px;
+                background: #0d1117;
+                color: #c9d1d9;
+                border: 1px solid #30363d;
+                border-radius: 4px;
+                padding: 4px;
                 text-align: center;
-                padding: 20px;
-                box-sizing: border-box;
+            }
+            .dynamic-alert {
+                margin-top: 15px;
+                padding: 10px;
+                background: rgba(63, 185, 80, 0.1);
+                border-left: 3px solid #3fb950;
+                color: #56d364;
+                font-size: 13px;
+                display: none;
             }
         </style>
     </head>
@@ -235,18 +272,20 @@
         <div class="map-container" id="grafo"></div>
         <div id="tooltip" class="tooltip"></div>
 
-        <!-- Estrutura do Painel Lateral -->
         <aside class="side-panel" id="side-panel">
             <button class="panel-close" id="close-panel" aria-label="Fechar painel">&times;</button>
             <div class="panel-title" id="panel-title">Distribuição</div>
             <div class="panel-content" id="panel-content">
-                <!-- Conteúdo dinâmico injetado via painel.js -->
+                <!-- Conteúdo matemático puro injetado via painel.js -->
             </div>
             <div class="plot-container" id="plot-container">
-                [ Área do gráfico interativo ]<br><br>Pode ser acoplado via Plotly.js ou JSXGraph futuramente.
+                <!-- Wrapper do gráfico injetado via plot.js -->
             </div>
         </aside>
 
+        <!-- Scripts em ordem estrita de dependência -->
+        <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+        <script src="plot.js" defer></script>
         <script src="painel.js" defer></script>
         <script src="app.js" defer></script>
     </body>

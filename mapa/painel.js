@@ -1,12 +1,10 @@
-// mapa/painel.js
-
 function abrirPainelLateral(d) {
     const sidePanel = document.getElementById("side-panel");
     document.getElementById("panel-title").innerText = d.id;
 
     const content = document.getElementById("panel-content");
 
-    // Construção do bloco matemático enxuto e sem texto desnecessário
+    // Construção do bloco matemático puramente notacional
     let html = `<div class="math-display" style="color:#8b949e;">\\( \\text{Suporte: } ${d.sup || '\\text{N/A}'} \\)</div>`;
 
     if (d.pdf) html += `<div class="math-display">\\[ f(x) = ${d.pdf} \\]</div>`;
@@ -21,6 +19,12 @@ function abrirPainelLateral(d) {
     content.innerHTML = html;
     sidePanel.classList.add("open");
 
+    // Delega a montagem gráfica para o plot.js
+    if (typeof iniciarGraficoInterativo === "function") {
+        iniciarGraficoInterativo(d.id);
+    }
+
+    // Renderiza o LaTeX isoladamente apenas para o conteúdo descritivo do painel
     if (window.MathJax && window.MathJax.typesetPromise) {
         MathJax.typesetClear([content]);
         MathJax.typesetPromise([content]).catch(err => console.log('MathJax Error:', err));
