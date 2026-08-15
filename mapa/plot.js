@@ -1,8 +1,7 @@
-// Dicionário de definições matemáticas das distribuições para o Plotly
 const plotDefinitions = {
     "Exponencial": {
         params: [
-            { id: "lambda", label: "\\(\\lambda\\) (Taxa)", min: 0.1, max: 5, step: 0.1, default: 1 }
+            { id: "lambda", label: "\\( \\lambda \\) (Taxa)", min: 0.1, max: 5, step: 0.1, default: 1 }
         ],
         xRange: [0, 10],
         fx: (x, p) => {
@@ -14,8 +13,8 @@ const plotDefinitions = {
     },
     "Gama": {
         params: [
-            { id: "alpha", label: "\\(\\alpha\\) (Forma)", min: 0.5, max: 10, step: 0.5, default: 2 },
-            { id: "beta", label: "\\(\\beta\\) (Taxa)", min: 0.5, max: 5, step: 0.5, default: 1 }
+            { id: "alpha", label: "\\( \\alpha \\) (Forma)", min: 0.5, max: 10, step: 0.5, default: 2 },
+            { id: "beta", label: "\\( \\beta \\) (Taxa)", min: 0.5, max: 5, step: 0.5, default: 1 }
         ],
         xRange: [0, 20],
         fx: (x, p) => {
@@ -35,8 +34,8 @@ const plotDefinitions = {
     },
     "Weibull": {
         params: [
-            { id: "a", label: "\\(a\\) (Escala)", min: 0.1, max: 5, step: 0.1, default: 1 },
-            { id: "b", label: "\\(b\\) (Forma)", min: 0.5, max: 5, step: 0.1, default: 2 }
+            { id: "a", label: "\\( a \\) (Escala)", min: 0.1, max: 5, step: 0.1, default: 1 },
+            { id: "b", label: "\\( b \\) (Forma)", min: 0.5, max: 5, step: 0.1, default: 2 }
         ],
         xRange: [0, 5],
         fx: (x, p) => {
@@ -51,8 +50,8 @@ const plotDefinitions = {
     },
     "Normal": {
         params: [
-            { id: "mu", label: "\\(\\mu\\) (Média)", min: -5, max: 5, step: 0.5, default: 0 },
-            { id: "sigma", label: "\\(\\sigma\\) (Desv. P)", min: 0.5, max: 5, step: 0.1, default: 1 }
+            { id: "mu", label: "\\( \\mu \\) (Média)", min: -5, max: 5, step: 0.5, default: 0 },
+            { id: "sigma", label: "\\( \\sigma \\) (Desv)", min: 0.5, max: 5, step: 0.1, default: 1 }
         ],
         xRange: [-10, 10],
         fx: (x, p) => {
@@ -73,14 +72,14 @@ function iniciarGraficoInterativo(distId) {
     const distData = plotDefinitions[distId];
 
     if (!distData) {
-        container.innerHTML = ``; // Deixa invisível se não houver plot
+        container.innerHTML = ``;
         return;
     }
 
     currentDist = distData;
     currentParams = {};
 
-    // Constrói HTML posicionando a 'plot-alert' APÓS os 'plot-controls'
+    // A estrutura HTML garante que o alerta venha APÓS os sliders
     let html = `
         <div class="plot-wrapper">
             <div id="plotly-div" class="plot-area"></div>
@@ -91,7 +90,7 @@ function iniciarGraficoInterativo(distId) {
         currentParams[param.id] = param.default;
         html += `
             <div class="control-group">
-                <label style="width: 85px; font-weight: bold; display: flex; align-items: center;">${param.label}</label>
+                <label style="width: 100px; display: flex; align-items: center; justify-content: flex-start; font-size: 13px;">${param.label}</label>
                 <input type="range" id="slider-${param.id}" min="${param.min}" max="${param.max}" step="${param.step}" value="${param.default}">
                 <input type="number" id="input-${param.id}" min="${param.min}" max="${param.max}" step="${param.step}" value="${param.default}">
             </div>
@@ -100,6 +99,7 @@ function iniciarGraficoInterativo(distId) {
 
     html += `
             </div>
+            <!-- ALERTA VERDE STRICTLY NO FUNDO DO PAINEL -->
             <div class="dynamic-alert" id="plot-alert"></div>
         </div>
     `;
@@ -128,7 +128,6 @@ function iniciarGraficoInterativo(distId) {
         });
     });
 
-    // Dispara a tipografia MathJax especificamente para a área de controles e labels
     if (window.MathJax && window.MathJax.typesetPromise) {
         MathJax.typesetPromise([container]).catch(err => console.log(err));
     }
@@ -165,8 +164,8 @@ function atualizarPlot() {
         margin: { l: 30, r: 10, t: 10, b: 25 },
         paper_bgcolor: 'transparent',
         plot_bgcolor: 'transparent',
-        xaxis: { color: '#8b949e', gridcolor: '#30363d', zerolinecolor: '#8b949e' },
-        yaxis: { color: '#8b949e', gridcolor: '#30363d', zerolinecolor: '#8b949e' }
+        xaxis: { color: '#8b949e', gridcolor: 'rgba(48, 54, 61, 0.4)', zerolinecolor: '#8b949e' },
+        yaxis: { color: '#8b949e', gridcolor: 'rgba(48, 54, 61, 0.4)', zerolinecolor: '#8b949e' }
     };
 
     const config = { responsive: true, displayModeBar: false };

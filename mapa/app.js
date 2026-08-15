@@ -181,10 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function exibirTooltip(event, d) {
         let tHTML = `<div class="tooltip-title">${d.id}</div>`;
-        tHTML += `<div class="tooltip-math" style="color:#8b949e;">\\( \\text{Suporte: } ${d.sup || ''} \\)</div>`;
-        if (d.pdf) tHTML += `<div class="tooltip-math">\\( f(x) = ${d.pdf} \\)</div>`;
-        if (d.esp) tHTML += `<div class="tooltip-math">\\( \\mathbb{E}(X) = ${d.esp} \\)</div>`;
-        if (d.var) tHTML += `<div class="tooltip-math">\\( \\text{Var}(X) = ${d.var} \\)</div>`;
+        if (d.sup) tHTML += `<div class="tooltip-math">\\( \\textstyle \\text{Suporte: } ${d.sup} \\)</div>`;
+        if (d.pdf) tHTML += `<div class="tooltip-math">\\( \\textstyle f(x) = ${d.pdf} \\)</div>`;
+        if (d.esp) tHTML += `<div class="tooltip-math">\\( \\textstyle \\mathbb{E}(X) = ${d.esp} \\)</div>`;
+        if (d.var) tHTML += `<div class="tooltip-math">\\( \\textstyle \\text{Var}(X) = ${d.var} \\)</div>`;
 
         tooltip.style("opacity", 1)
             .html(tHTML)
