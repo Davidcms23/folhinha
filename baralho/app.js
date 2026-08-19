@@ -3,7 +3,9 @@ let curTrilhaKey = Object.keys(TRILHAS)[0];
 let curUnit = 0;
 let curDay = null;
 let curCard = 0;
-let tuxClicks = 0; // Contador para o Easter Egg do Tux
+let tuxClicks = 0;
+let flipHeat = 0;
+let isCardBroken = false;
 
 let doneSet = new Set();
 try {
@@ -239,12 +241,13 @@ function renderCard() {
 
 /* ── Flip card & Tux Easter Egg ──────────────────────── */
 function flipCard() {
-  const card = document.getElementById("fc-card");
+  if (isCardBroken) return;
 
-  // Apenas faz o giro em 3D normal, sem glitch
+  const card = document.getElementById("fc-card");
+  const scene = document.getElementById("fc-scene");
+
   card.classList.toggle("flipped");
 
-  // Easter Egg do Tux a cada 10 cliques cumulativos
   tuxClicks++;
   if (tuxClicks >= 10) {
     const tux = document.getElementById("tux-easter-egg");
@@ -254,7 +257,58 @@ function flipCard() {
     }
     tuxClicks = 0;
   }
+
+  flipHeat++;
+  const heatIntensity = flipHeat / 20;
+
+  if (flipHeat > 0 && flipHeat < 20) {
+    // O filtro é aplicado na scene para evitar a perda do transform-style: preserve-3d no card
+    scene.style.filter = `drop-shadow(0 0 ${15 * heatIntensity}px red) sepia(${heatIntensity}) hue-rotate(-20deg) saturate(${1 + heatIntensity * 3})`;
+  }
+
+  if (flipHeat >= 20) {
+    shatterCard();
+  }
 }
+
+function shatterCard() {
+  isCardBroken = true;
+  const scene = document.getElementById("fc-scene");
+  const card = document.getElementById("fc-card");
+
+  card.style.display = "none";
+
+  // Libera o overflow para permitir que os fragmentos ultrapassem as bordas do contêiner
+  scene.style.overflow = "visible";
+
+  const numShards = 30;
+
+  for (let i = 0; i < numShards; i++) {
+    const shard = document.createElement("div");
+    shard.className = "glass-shard";
+
+    shard.style.background = "#fff";
+    shard.style.boxShadow = "inset 0 0 10px red, 0 0 5px red";
+
+    const p1 = `${Math.random() * 100}% ${Math.random() * 100}%`;
+    const p2 = `${Math.random() * 100}% ${Math.random() * 100}%`;
+    const p3 = `${Math.random() * 100}% ${Math.random() * 100}%`;
+    shard.style.clipPath = `polygon(${p1}, ${p2}, ${p3})`;
+
+    scene.appendChild(shard);
+
+    const dirX = (Math.random() - 0.5) * 600;
+    const dirY = (Math.random() * 400) + 150;
+    const rot = (Math.random() - 0.5) * 720;
+
+    requestAnimationFrame(() => {
+      shard.style.transform = `translate(${dirX}px, ${dirY}px) rotate(${rot}deg) scale(0.6)`;
+      shard.style.opacity = "0.5";
+    });
+  }
+}
+
+setTimeout(() => tux.classList.remove("peek"), 2000);
 
 /* ── Copy helpers ────────────────────────────────────── */
 function stripHtml(html) {
