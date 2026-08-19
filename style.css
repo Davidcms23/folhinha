@@ -681,3 +681,36 @@ mjx-container {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+.trilha-selector,
+.unit-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+}
+
+.trilha-btn,
+.unit-tab {
+    background: transparent;
+    border: 1px solid #2a2f3a;
+    color: #8a93a3;
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.trilha-btn:hover,
+.unit-tab:hover {
+    border-color: #4fd1e8;
+    color: #e6e6e6;
+}
+
+.trilha-btn.active,
+.unit-tab.active {
+    border-color: #4fd1e8;
+    color: #4fd1e8;
+}

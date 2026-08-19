@@ -1,19 +1,99 @@
 /* ── State ───────────────────────────────────────────── */
-const TOTAL_DAYS = 30;
-
-let done = [];
-try {
-  done = JSON.parse(localStorage.getItem("folhinha_done") || "[]");
-} catch (e) {}
-
+let curTrilhaKey = Object.keys(TRILHAS)[0];
+let curUnit = 0;
 let curDay = null;
 let curCard = 0;
 
+let doneSet = new Set();
+try {
+  doneSet = new Set(JSON.parse(localStorage.getItem("folhinha_done") || "[]"));
+} catch (e) {}
+
+/* ── Helpers de trilha/unidade ───────────────────────── */
+function getTrilha() {
+  return TRILHAS[curTrilhaKey];
+}
+
+function getUnit() {
+  return getTrilha().units[curUnit];
+}
+
+function dayKey(trilha, unit, day) {
+  return `${trilha}:${unit}:${day}`;
+}
+
+function isDayDone(i) {
+  return doneSet.has(dayKey(curTrilhaKey, curUnit, i));
+}
+
 /* ── Persistence ─────────────────────────────────────── */
-function save() {
+function saveDone() {
   try {
-    localStorage.setItem("folhinha_done", JSON.stringify(done));
+    localStorage.setItem("folhinha_done", JSON.stringify([...doneSet]));
   } catch (e) {}
+}
+
+/* ── Trilha selector ─────────────────────────────────── */
+function renderTrilhaSelector() {
+  const el = document.getElementById("trilha-selector");
+  if (!el) return;
+  el.innerHTML = "";
+
+  const keys = Object.keys(TRILHAS);
+  if (keys.length <= 1) {
+    el.style.display = "none";
+    return;
+  }
+  el.style.display = "flex";
+
+  keys.forEach((key) => {
+    const btn = document.createElement("button");
+    btn.className = "trilha-btn" + (key === curTrilhaKey ? " active" : "");
+    btn.textContent = TRILHAS[key].label;
+    btn.addEventListener("click", () => setTrilha(key));
+    el.appendChild(btn);
+  });
+}
+
+function setTrilha(key) {
+  if (key === curTrilhaKey) return;
+  curTrilhaKey = key;
+  curUnit = 0;
+  curDay = null;
+  renderAll();
+}
+
+/* ── Unit tabs ───────────────────────────────────────── */
+function renderUnitTabs() {
+  const el = document.getElementById("unit-tabs");
+  if (!el) return;
+  el.innerHTML = "";
+
+  const units = getTrilha().units;
+  const hasNamedUnits = units.length > 1 || units[0].label;
+
+  if (!hasNamedUnits) {
+    el.style.display = "none";
+    return;
+  }
+  el.style.display = "flex";
+
+  units.forEach((unit, i) => {
+    const btn = document.createElement("button");
+    btn.className = "unit-tab" + (i === curUnit ? " active" : "");
+    btn.textContent = unit.label || `Unidade ${i + 1}`;
+    btn.addEventListener("click", () => setUnit(i));
+    el.appendChild(btn);
+  });
+}
+
+function setUnit(i) {
+  if (i === curUnit) return;
+  curUnit = i;
+  curDay = null;
+  renderUnitTabs();
+  renderGrid();
+  hidePanel();
 }
 
 /* ── Grid ────────────────────────────────────────────── */
@@ -22,9 +102,13 @@ function renderGrid() {
   if (!grid) return;
   grid.innerHTML = "";
 
-  for (let i = 0; i < TOTAL_DAYS; i++) {
-    const day = typeof DAYS !== "undefined" && DAYS[i] ? DAYS[i] : null;
-    const isDone = done.includes(i);
+  const unit = getUnit();
+  const days = unit.days;
+  const total = unit.totalSlots || days.length;
+
+  for (let i = 0; i < total; i++) {
+    const day = days[i] || null;
+    const isDone = day && isDayDone(i);
     const isActive = curDay === i;
     const isLocked = !day;
 
@@ -74,15 +158,21 @@ function renderGrid() {
 }
 
 function updateProgress() {
-  const n = done.length;
-  const pct = Math.round((n / TOTAL_DAYS) * 100);
-  const dayNo = Math.min(n + 1, TOTAL_DAYS);
+  const unit = getUnit();
+  const days = unit.days;
+  const total = unit.totalSlots || days.length;
 
-  // Adicionado Null-Check: Impede travamento caso os elementos não existam na página (ex: página do baralho)
+  const n = days.reduce(
+    (acc, _, i) => acc + (isDayDone(i) ? 1 : 0),
+    0,
+  );
+  const pct = total ? Math.round((n / total) * 100) : 0;
+  const dayNo = Math.min(n + 1, total || 1);
+
   const progLabel = document.getElementById("prog-label");
   const progFill = document.getElementById("prog-fill");
 
-  if (progLabel) progLabel.textContent = `Overall progress: Dia ${dayNo} of ${TOTAL_DAYS}`;
+  if (progLabel) progLabel.textContent = `Overall progress: Dia ${dayNo} of ${total}`;
   if (progFill) progFill.style.width = pct + "%";
 }
 
@@ -90,8 +180,6 @@ function updateProgress() {
 function openDay(i) {
   curDay = i;
   curCard = 0;
-
-  const day = DAYS[i];
 
   document.getElementById("panel").classList.add("visible");
   document.getElementById("empty-state").style.display = "none";
@@ -105,11 +193,20 @@ function openDay(i) {
     .scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+function hidePanel() {
+  const panel = document.getElementById("panel");
+  const empty = document.getElementById("empty-state");
+  const fcWrap = document.getElementById("fc-wrap");
+  if (panel) panel.classList.remove("visible");
+  if (empty) empty.style.display = "";
+  if (fcWrap) fcWrap.style.display = "none";
+}
+
 /* ── Render current card ─────────────────────────────── */
 function renderCard() {
   if (curDay === null) return;
 
-  const cards = DAYS[curDay].cards;
+  const cards = getUnit().days[curDay].cards;
   const card = cards[curCard];
 
   document.getElementById("card-counter").textContent =
@@ -153,12 +250,10 @@ function flashBtn(btn) {
   }, 1400);
 }
 
-// NOVO: Função de Fallback para uso local (file://)
 function fallbackCopyTextToClipboard(text, btn) {
   const textArea = document.createElement("textarea");
   textArea.value = text;
 
-  // Impede scroll indesejado ao criar o textarea
   textArea.style.top = "-9999px";
   textArea.style.left = "-9999px";
   textArea.style.position = "fixed";
@@ -168,7 +263,7 @@ function fallbackCopyTextToClipboard(text, btn) {
   textArea.select();
 
   try {
-    const successful = document.execCommand('copy');
+    const successful = document.execCommand("copy");
     if (successful) {
       flashBtn(btn);
     } else {
@@ -182,29 +277,28 @@ function fallbackCopyTextToClipboard(text, btn) {
 }
 
 function copyToClipboard(text, btn) {
-  // Tenta usar a API moderna (requer HTTPS ou Localhost)
   if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => flashBtn(btn))
       .catch((err) => {
         console.warn("Clipboard API bloqueada, tentando fallback...", err);
         fallbackCopyTextToClipboard(text, btn);
       });
   } else {
-    // Se o protocolo for file:// ou ambiente inseguro, cai direto no fallback
     fallbackCopyTextToClipboard(text, btn);
   }
 }
 
 function copyFront(btn) {
   if (curDay === null) return;
-  const card = DAYS[curDay].cards[curCard];
+  const card = getUnit().days[curDay].cards[curCard];
   copyToClipboard(stripHtml(card.q), btn);
 }
 
 function copyBack(btn) {
   if (curDay === null) return;
-  const card = DAYS[curDay].cards[curCard];
+  const card = getUnit().days[curDay].cards[curCard];
   copyToClipboard(stripHtml(card.a), btn);
 }
 
@@ -217,7 +311,7 @@ function prevCard() {
 }
 
 function nextCard() {
-  if (curDay !== null && curCard < DAYS[curDay].cards.length - 1) {
+  if (curDay !== null && curCard < getUnit().days[curDay].cards.length - 1) {
     curCard++;
     renderCard();
   }
@@ -232,14 +326,23 @@ document.addEventListener("keydown", (e) => {
 
 /* ── Mark done ───────────────────────────────────────── */
 function markDone() {
-  if (curDay === null || done.includes(curDay)) return;
-  done.push(curDay);
-  save();
+  if (curDay === null) return;
+  const key = dayKey(curTrilhaKey, curUnit, curDay);
+  if (doneSet.has(key)) return;
+  doneSet.add(key);
+  saveDone();
   openDay(curDay);
 }
 
 /* ── Init ────────────────────────────────────────────── */
-renderGrid();
+function renderAll() {
+  renderTrilhaSelector();
+  renderUnitTabs();
+  renderGrid();
+  hidePanel();
+}
+
+renderAll();
 
 /* ── AnkiConnect ─────────────────────────────────────── */
 const ANKI_URL = "http://127.0.0.1:8765";
@@ -257,7 +360,7 @@ async function ankiInvoke(action, params = {}) {
 
 async function addToAnki(btn) {
   if (curDay === null) return;
-  const card = DAYS[curDay].cards[curCard];
+  const card = getUnit().days[curDay].cards[curCard];
   const original = btn.innerHTML;
   btn.disabled = true;
 
@@ -272,7 +375,7 @@ async function addToAnki(btn) {
           Back: stripHtml(card.a),
         },
         options: { allowDuplicate: false },
-        tags: ["folhinha", `dia-${curDay + 1}`],
+        tags: ["folhinha", curTrilhaKey, `dia-${curDay + 1}`],
       },
     });
     btn.classList.add("ok");
