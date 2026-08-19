@@ -1,3 +1,6 @@
+/* ═══════════════════════════════════════════════════════════════
+   1. RESET
+   ═══════════════════════════════════════════════════════════════ */
 *,
 *::before,
 *::after {
@@ -6,6 +9,9 @@
     padding: 0;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   2. DESIGN TOKENS (variáveis globais)
+   ═══════════════════════════════════════════════════════════════ */
 :root {
     --bg: #0a0e0f;
     --surface: #10161a;
@@ -28,6 +34,9 @@
     --glitch-purple: #a855f7;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   3. BASE / BODY
+   ═══════════════════════════════════════════════════════════════ */
 html {
     font-size: 16px;
 }
@@ -46,7 +55,9 @@ body {
     overflow-x: hidden; /* Evita scroll quando o Tux aparecer */
 }
 
-/* ── Navbar ─────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   4. NAVBAR
+   ═══════════════════════════════════════════════════════════════ */
 .navbar {
     background: var(--surface);
     border-bottom: 0.5px solid var(--border);
@@ -105,14 +116,15 @@ body {
     color: var(--accent);
 }
 
-/* ── Main ─────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   5. LAYOUT PRINCIPAL (main / page-layout com sidebar TOC)
+   ═══════════════════════════════════════════════════════════════ */
 .main {
     max-width: 960px;
     margin: 0 auto;
     padding: 48px 32px 80px;
 }
 
-/* ── Layout com sidebar (TOC) ─────────────────── */
 .page-layout {
     max-width: 1280px;
     margin: 0 auto;
@@ -173,17 +185,6 @@ body {
     border-left-color: var(--accent);
 }
 
-@media (max-width: 900px) {
-    .toc {
-        display: none;
-    }
-    .page-layout {
-        display: block;
-        max-width: 960px;
-        padding: 32px 20px 60px;
-    }
-}
-
 .breadcrumb {
     font-size: 12px;
     color: var(--hint);
@@ -203,7 +204,9 @@ body {
     }
 }
 
-/* ── Tipografia ───────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   6. TIPOGRAFIA
+   ═══════════════════════════════════════════════════════════════ */
 .page-title {
     font-size: 22px;
     font-weight: 700;
@@ -294,7 +297,9 @@ code {
     color: var(--accent);
 }
 
-/* ── Progress ─────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   7. BARRA DE PROGRESSO
+   ═══════════════════════════════════════════════════════════════ */
 .progress-row {
     display: flex;
     align-items: center;
@@ -325,7 +330,9 @@ code {
     transition: width 0.4s ease;
 }
 
-/* ── Seletores (Trilhas e Abas) ───────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   8. SELETORES (Trilhas e Abas de Unidade)
+   ═══════════════════════════════════════════════════════════════ */
 .trilha-selector,
 .unit-tabs {
     display: flex;
@@ -359,7 +366,9 @@ code {
     color: var(--glitch-blue);
 }
 
-/* ── Days grid ────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   9. GRID DE DIAS (days-grid)
+   ═══════════════════════════════════════════════════════════════ */
 .days-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -425,7 +434,9 @@ code {
     font-weight: 400;
 }
 
-/* ── Panel ────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   10. PAINEL (container que mostra/esconde o conteúdo do dia)
+   ═══════════════════════════════════════════════════════════════ */
 .panel {
     display: none;
     background: var(--surface);
@@ -438,8 +449,9 @@ code {
     display: block;
 }
 
-/* ── Flashcards (Estrutura Básica) ────────────── */
-
+/* ═══════════════════════════════════════════════════════════════
+   11. FLASHCARDS — Estrutura (wrapper, navegação, contador)
+   ═══════════════════════════════════════════════════════════════ */
 .fc-wrap {
     position: relative;
     border-radius: var(--radius-lg);
@@ -499,6 +511,18 @@ code {
     text-align: center;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   12. FLASHCARDS — Lógica de Flip 3D (fc-scene → fc-card → fc-face)
+   -----------------------------------------------------------------
+   ⚠️ CORREÇÃO DO BUG DE ESPELHAMENTO:
+   `border-radius` + `overflow: hidden` NÃO podem ficar no mesmo
+   elemento que tem `backface-visibility: hidden` e é rotacionado
+   (.fc-face). Essa combinação é um bug conhecido do Chrome/WebKit:
+   o navegador falha em esconder a face de trás e mostra o texto
+   espelhado (backwards). A correção é colocar o recorte arredondado
+   (border-radius + overflow) no .fc-scene, que NÃO gira — só o
+   .fc-card (filho dele) gira em 3D.
+   ═══════════════════════════════════════════════════════════════ */
 .fc-scene {
     width: min(92vw, 480px);
     height: 260px;
@@ -507,42 +531,51 @@ code {
     position: relative;
     z-index: 1;
     margin-bottom: 12px;
+
+    /* Recorte arredondado do card fica AQUI, fora do elemento 3D */
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
-/* ── Glitch Logic (Cards e Botões) ────────────── */
 .fc-card {
     width: 100%;
     height: 100%;
     position: relative;
-    /* Restaura o eixo 3D e a transição suave de giro */
+
+    /* Eixo 3D + transição suave de giro */
     transform-style: preserve-3d;
     transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fc-card.flipped {
     transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg); /* compat Safari */
 }
 
 .fc-face {
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: var(--radius-md);
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     padding: 2rem;
     box-sizing: border-box;
+
     background: var(--surface);
     border: 0.5px solid var(--border);
-    overflow: hidden;
-    /* Restaura o backface para o giro 3D funcionar corretamente */
+
+    /* Sem border-radius/overflow aqui — isso é o que causava o bug */
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .fc-face.fc-back {
     transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg); /* compat Safari */
 }
 
 /* Contador Hexadecimal Cyberpunk no Card */
@@ -592,54 +625,76 @@ code {
     margin-top: 20px;
 }
 
-/* Efeitos Visuais - Scanlines CRT */
+/* Efeitos Visuais - Scanlines CRT (agora seguro, pois .fc-face não recorta mais) */
 .fc-face::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(79, 209, 232, 0.035) 0px,
-    rgba(79, 209, 232, 0.035) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: screen;
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(79, 209, 232, 0.035) 0px,
+        rgba(79, 209, 232, 0.035) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    mix-blend-mode: screen;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   13. GLITCH — Animações (cards e botões)
+   ═══════════════════════════════════════════════════════════════ */
 .fc-scene.glitching,
 .copy-btn.ok,
 .copy-btn.error {
-  animation: glitch-jitter 0.4s steps(6, end);
+    animation:
+        glitch-rgb-btn 0.4s steps(2, end),
+        glitch-jitter 0.4s steps(6, end);
+}
+
+.fc-scene.glitching {
+    animation: glitch-scene 0.4s steps(6, end);
+}
+
+@keyframes glitch-scene {
+    0%, 100% {
+        filter: none;
+    }
+    20% {
+        filter: brightness(1.1);
+    }
+    40% {
+        filter: brightness(0.95);
+    }
+    60% {
+        filter: brightness(1.08);
+    }
+    80% {
+        filter: brightness(0.98);
+    }
 }
 
 /* Aberração Cromática e Flash (Cards) */
 .fc-scene.glitching .fc-text,
 .fc-scene.glitching .fc-label,
 .fc-scene.glitching .hex-counter {
-  animation: glitch-rgb 0.4s steps(2, end);
+    animation: glitch-rgb 0.4s steps(2, end);
 }
 
 /* Flash transversal durante o glitch no verso */
 .fc-scene.glitching .fc-back::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(79, 209, 232, 0.15) 48%,
-    rgba(168, 85, 247, 0.15) 52%,
-    transparent 100%
-  );
-  animation: glitch-flash 0.4s steps(3, end);
-  pointer-events: none;
-}
-
-.copy-btn.ok,
-.copy-btn.error {
-    animation: glitch-rgb-btn 0.4s steps(2, end), glitch-jitter 0.4s steps(6, end);
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(79, 209, 232, 0.15) 48%,
+        rgba(168, 85, 247, 0.15) 52%,
+        transparent 100%
+    );
+    animation: glitch-flash 0.4s steps(3, end);
+    pointer-events: none;
 }
 
 .copy-btn.ok {
@@ -653,54 +708,77 @@ code {
 }
 
 @keyframes glitch-jitter {
-  0% { transform: translate(0, 0); }
-  15% { transform: translate(-2px, 1px) skewX(1deg); }
-  30% { transform: translate(2px, -1px) skewX(-1deg); }
-  45% { transform: translate(-1px, 2px); }
-  60% { transform: translate(1px, -2px) skewX(0.5deg); }
-  75% { transform: translate(-2px, -1px); }
-  100% { transform: translate(0, 0); }
+    0% {
+        transform: translate(0, 0);
+    }
+    15% {
+        transform: translate(-2px, 1px);
+    }
+    30% {
+        transform: translate(2px, -1px);
+    }
+    45% {
+        transform: translate(-1px, 2px);
+    }
+    60% {
+        transform: translate(1px, -2px);
+    }
+    75% {
+        transform: translate(-2px, -1px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
 }
 
 @keyframes glitch-rgb {
-  0%, 100% {
-    text-shadow: 1px 0 var(--glitch-blue), -1px 0 var(--glitch-purple);
-  }
-  25% {
-    text-shadow: -3px 0 var(--glitch-blue), 3px 0 var(--glitch-purple);
-  }
-  50% {
-    text-shadow: 3px 0 var(--glitch-blue), -3px 0 var(--glitch-purple);
-  }
-  75% {
-    text-shadow: -2px 0 var(--glitch-blue), 2px 0 var(--glitch-purple);
-  }
+    0%, 100% {
+        text-shadow: 1px 0 var(--glitch-blue), -1px 0 var(--glitch-purple);
+    }
+    25% {
+        text-shadow: -3px 0 var(--glitch-blue), 3px 0 var(--glitch-purple);
+    }
+    50% {
+        text-shadow: 3px 0 var(--glitch-blue), -3px 0 var(--glitch-purple);
+    }
+    75% {
+        text-shadow: -2px 0 var(--glitch-blue), 2px 0 var(--glitch-purple);
+    }
 }
 
 /* Variável local para o RGB dos botões */
 @keyframes glitch-rgb-btn {
-  0%, 100% {
-    text-shadow: 1px 0 currentColor, -1px 0 rgba(255,255,255,0.5);
-  }
-  25% {
-    text-shadow: -3px 0 currentColor, 3px 0 rgba(255,255,255,0.5);
-  }
-  50% {
-    text-shadow: 3px 0 currentColor, -3px 0 rgba(255,255,255,0.5);
-  }
-  75% {
-    text-shadow: -2px 0 currentColor, 2px 0 rgba(255,255,255,0.5);
-  }
+    0%, 100% {
+        text-shadow: 1px 0 currentColor, -1px 0 rgba(255, 255, 255, 0.5);
+    }
+    25% {
+        text-shadow: -3px 0 currentColor, 3px 0 rgba(255, 255, 255, 0.5);
+    }
+    50% {
+        text-shadow: 3px 0 currentColor, -3px 0 rgba(255, 255, 255, 0.5);
+    }
+    75% {
+        text-shadow: -2px 0 currentColor, 2px 0 rgba(255, 255, 255, 0.5);
+    }
 }
 
 @keyframes glitch-flash {
-  0% { opacity: 0; transform: translateX(-100%); }
-  40% { opacity: 1; }
-  100% { opacity: 0; transform: translateX(100%); }
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    40% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
 }
 
-/* ── Copy Action Area ─────────────────────────── */
-
+/* ═══════════════════════════════════════════════════════════════
+   14. ÁREA DE AÇÕES DE CÓPIA (Copiar Frente/Verso, Adicionar ao Anki)
+   ═══════════════════════════════════════════════════════════════ */
 .fc-copy {
     display: flex;
     flex-wrap: wrap;
@@ -739,7 +817,9 @@ code {
     cursor: default;
 }
 
-/* ── Tux Easter Egg ───────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   15. TUX EASTER EGG
+   ═══════════════════════════════════════════════════════════════ */
 .tux-easter-egg {
     position: fixed;
     bottom: -150px;
@@ -756,7 +836,9 @@ code {
     bottom: -10px;
 }
 
-/* ── Anki tip ─────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   16. DICA DO ANKI (anki-tip)
+   ═══════════════════════════════════════════════════════════════ */
 .anki-tip {
     display: flex;
     gap: 12px;
@@ -794,7 +876,9 @@ code {
     color: var(--text);
 }
 
-/* ── Empty state ──────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   17. ESTADO VAZIO (empty-state)
+   ═══════════════════════════════════════════════════════════════ */
 .empty-state {
     padding: 56px;
     text-align: center;
@@ -804,7 +888,9 @@ code {
     border-radius: var(--radius-lg);
 }
 
-/* ── Footer ───────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   18. FOOTER
+   ═══════════════════════════════════════════════════════════════ */
 .site-footer {
     text-align: center;
     padding: 26px;
@@ -823,14 +909,29 @@ code {
     color: var(--accent);
 }
 
-/* ── MathJax overrides ────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   19. OVERRIDES DO MATHJAX
+   ═══════════════════════════════════════════════════════════════ */
 mjx-container {
     overflow-x: auto;
     max-width: 100%;
     color: var(--text);
 }
 
-/* ── Responsive ───────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════
+   20. RESPONSIVO
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .toc {
+        display: none;
+    }
+    .page-layout {
+        display: block;
+        max-width: 960px;
+        padding: 32px 20px 60px;
+    }
+}
+
 @media (max-width: 860px) {
     .main {
         padding: 32px 20px 60px;
@@ -856,37 +957,4 @@ mjx-container {
     .days-grid {
         grid-template-columns: repeat(3, 1fr);
     }
-}
-
-.trilha-selector,
-.unit-tabs {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
-}
-
-.trilha-btn,
-.unit-tab {
-    background: transparent;
-    border: 1px solid #2a2f3a;
-    color: #8a93a3;
-    font-family: inherit;
-    font-size: 0.85rem;
-    padding: 0.4rem 0.9rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
-}
-
-.trilha-btn:hover,
-.unit-tab:hover {
-    border-color: #4fd1e8;
-    color: #e6e6e6;
-}
-
-.trilha-btn.active,
-.unit-tab.active {
-    border-color: #4fd1e8;
-    color: #4fd1e8;
 }
