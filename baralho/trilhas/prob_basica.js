@@ -1,11 +1,10 @@
 /* ─────────────────────────────────────────────────────────
  * Trilha: Probabilidade Básica
- * Dividida em 3 unidades, cada uma com número indeterminado
- * de dias/cards.
+ * Trilha para a disciplina de Probabilidade básica I
  * ───────────────────────────────────────────────────────── */
 
 TRILHAS.prob_basica = {
-  label: "Probabilidade Básica",
+  label: "Probabilidade Básica I",
   units: [
     {
       label: "Unidade 1",

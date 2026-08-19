@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>folhinha::início</title>
         <link rel="stylesheet" href="style.css" />
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
-        <script src="md-loader.js" defer></script>
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="Principal">
@@ -16,6 +14,7 @@
                 </a>
                 <div class="nav-links">
                     <a href="./" class="nav-link active">[início]</a>
+                    <a href="memoria/" class="nav-link">[memória]</a>
                     <a href="baralho/" class="nav-link">[baralho]</a>
                     <a href="mapa/" class="nav-link">[mapa]</a>
                     <a href="sobre/" class="nav-link">[sobre]</a>
@@ -25,17 +24,14 @@
 
         <main class="page-layout">
             <div class="main-col">
-                <p class="breadcrumb">~/folhinha$cat memoria.md</p>
+                <p class="breadcrumb">~/folhinha$</p>
 
-                <div id="content" data-md="index.md">
-                    <p class="md-loading">carregando conteúdo&hellip;</p>
+                <!-- Novo conteúdo da página inicial entra aqui -->
+                <div id="content">
+                    <h1>Bem-vindo à Folhinha</h1>
+                    <p>Selecione um dos diretórios na barra de navegação superior.</p>
                 </div>
             </div>
-
-            <aside class="toc" aria-label="Estrutura do documento">
-                <p class="toc-label">estrutura</p>
-                <nav id="toc-nav"></nav>
-            </aside>
         </main>
 
         <footer class="site-footer">
@@ -50,6 +46,5 @@
                    rel="noopener noreferrer">Christian D. Martins</a>
             </p>
         </footer>
-
     </body>
 </html>

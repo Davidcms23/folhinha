@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────────────────
  * Trilha: Resumo Geral
- * Trilha "chata" (sem unidades), 30 dias.
+ * Trilha feita com base na folha de resumo
  * ───────────────────────────────────────────────────────── */
 
 TRILHAS.resumo = {
@@ -8,7 +8,7 @@ TRILHAS.resumo = {
   units: [
     {
       label: null,
-      totalSlots: 30,
+      totalSlots: 40,
       days: [
         {
           label: "Momentos e Medidas de Forma",

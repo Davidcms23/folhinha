@@ -3,6 +3,7 @@ let curTrilhaKey = Object.keys(TRILHAS)[0];
 let curUnit = 0;
 let curDay = null;
 let curCard = 0;
+let tuxClicks = 0; // Contador para o Easter Egg do Tux
 
 let doneSet = new Set();
 try {
@@ -212,6 +213,16 @@ function renderCard() {
   document.getElementById("card-counter").textContent =
     `${curCard + 1} / ${cards.length}`;
 
+  // Lógica do Contador Cyberpunk em Hexadecimal
+  const currHex = (curCard + 1).toString(16).padStart(2, '0').toUpperCase();
+  const totalHex = cards.length.toString(16).padStart(2, '0').toUpperCase();
+  const hexStr = `[ 0x${currHex} // 0x${totalHex} ]`;
+
+  const hexFront = document.getElementById("hex-front");
+  const hexBack = document.getElementById("hex-back");
+  if(hexFront) hexFront.textContent = hexStr;
+  if(hexBack) hexBack.textContent = hexStr;
+
   const fcCard = document.getElementById("fc-card");
   fcCard.classList.remove("flipped");
 
@@ -226,9 +237,23 @@ function renderCard() {
   }
 }
 
-/* ── Flip card ───────────────────────────────────────── */
+/* ── Flip card & Tux Easter Egg ──────────────────────── */
 function flipCard() {
-  document.getElementById("fc-card").classList.toggle("flipped");
+  const card = document.getElementById("fc-card");
+
+  // Apenas faz o giro em 3D normal, sem glitch
+  card.classList.toggle("flipped");
+
+  // Easter Egg do Tux a cada 10 cliques cumulativos
+  tuxClicks++;
+  if (tuxClicks >= 10) {
+    const tux = document.getElementById("tux-easter-egg");
+    if (tux) {
+      tux.classList.add("peek");
+      setTimeout(() => tux.classList.remove("peek"), 2000);
+    }
+    tuxClicks = 0;
+  }
 }
 
 /* ── Copy helpers ────────────────────────────────────── */
@@ -241,9 +266,12 @@ function stripHtml(html) {
 }
 
 function flashBtn(btn) {
+  if (btn.classList.contains("ok")) return;
+
   const original = btn.innerHTML;
   btn.classList.add("ok");
   btn.textContent = "Copiado!";
+
   setTimeout(() => {
     btn.classList.remove("ok");
     btn.innerHTML = original;
@@ -302,18 +330,57 @@ function copyBack(btn) {
   copyToClipboard(stripHtml(card.a), btn);
 }
 
-/* ── Navigation ──────────────────────────────────────── */
+/* ── Navigation (Glitch on Next/Prev) ────────────────── */
 function prevCard() {
   if (curCard > 0) {
-    curCard--;
-    renderCard();
+    const fcCard = document.getElementById("fc-card");
+    const fcScene = document.getElementById("fc-scene");
+
+    if (fcCard.classList.contains("flipped")) {
+      fcScene.classList.add("glitching");
+
+      setTimeout(() => {
+        fcCard.style.transition = "none";
+        curCard--;
+        renderCard();
+        void fcCard.offsetWidth;
+        fcCard.style.transition = "";
+      }, 200);
+
+      setTimeout(() => fcScene.classList.remove("glitching"), 400);
+    } else {
+      curCard--;
+      renderCard();
+    }
   }
 }
 
 function nextCard() {
-  if (curDay !== null && curCard < getUnit().days[curDay].cards.length - 1) {
-    curCard++;
-    renderCard();
+  const cards = getUnit().days[curDay].cards;
+
+  if (curDay !== null && curCard < cards.length - 1) {
+    const fcCard = document.getElementById("fc-card");
+    const fcScene = document.getElementById("fc-scene");
+
+    if (fcCard.classList.contains("flipped")) {
+      fcScene.classList.add("glitching");
+
+      setTimeout(() => {
+        fcCard.style.transition = "none";
+        curCard++;
+        renderCard();
+        void fcCard.offsetWidth;
+        fcCard.style.transition = "";
+      }, 200);
+
+      setTimeout(() => {
+        fcScene.classList.remove("glitching");
+      }, 400);
+
+    } else {
+      curCard++;
+      renderCard();
+    }
   }
 }
 

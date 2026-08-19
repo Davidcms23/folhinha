@@ -3,8 +3,10 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>folhinha::sobre</title>
+        <title>folhinha::memória</title>
         <link rel="stylesheet" href="../style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+        <script src="../md-loader.js" defer></script>
     </head>
     <body>
         <nav class="navbar" role="navigation" aria-label="Principal">
@@ -14,23 +16,28 @@
                 </a>
                 <div class="nav-links">
                     <a href="../" class="nav-link">[início]</a>
-                    <a href="../memoria/" class="nav-link">[memória]</a>
+                    <a href="../memoria/" class="nav-link active">[memória]</a>
                     <a href="../baralho/" class="nav-link">[baralho]</a>
                     <a href="../mapa/" class="nav-link">[mapa]</a>
-                    <a href="../sobre/" class="nav-link active">[sobre]</a>
+                    <a href="../sobre/" class="nav-link">[sobre]</a>
                 </div>
             </div>
         </nav>
 
-        <main class="main">
-            <p class="breadcrumb">~/folhinha$cat sobre.md</p>
+        <main class="page-layout">
+            <div class="main-col">
+                <p class="breadcrumb">~/folhinha/memoria$cat index.md</p>
 
-            <h1 class="page-title">Sobre o projeto</h1>
+                <!-- O data-md aponta para o index.md que foi movido para esta mesma pasta -->
+                <div id="content" data-md="index.md">
+                    <p class="md-loading">carregando conteúdo&hellip;</p>
+                </div>
+            </div>
 
-            <p>
-                Ajudar a lembrar de forma concreta algumas fórmulas
-                importantes de probabilidade.
-            </p>
+            <aside class="toc" aria-label="Estrutura do documento">
+                <p class="toc-label">estrutura</p>
+                <nav id="toc-nav"></nav>
+            </aside>
         </main>
 
         <footer class="site-footer">
@@ -45,6 +52,5 @@
                    rel="noopener noreferrer">Christian D. Martins</a>
             </p>
         </footer>
-
     </body>
 </html>

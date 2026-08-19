@@ -39,12 +39,20 @@ function buildToc(mount) {
     const nav = document.getElementById("toc-nav");
     if (!nav) return;
 
-    mount.querySelectorAll("h2, h3").forEach((h, i) => {
+    mount.querySelectorAll("h1, h2, h3").forEach((h, i) => {
         h.id = h.id || `sec-${i}`;
         const a = document.createElement("a");
         a.href = `#${h.id}`;
         a.textContent = h.textContent;
-        if (h.tagName === "H3") a.classList.add("toc-sub");
+
+        if (h.tagName === "H2") {
+            a.classList.add("toc-sub");
+        }
+        else if (h.tagName === "H3") {
+            a.classList.add("toc-sub");
+            a.style.paddingLeft = "1.5rem";
+        }
+
         nav.appendChild(a);
     });
 }

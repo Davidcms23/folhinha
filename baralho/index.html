@@ -6,7 +6,7 @@
         <title>folhinha::baralho</title>
         <meta
             name="description"
-            content="Trilha de 30 dias de flashcards para memorizar distribuições de probabilidade no Anki."
+            content="Cards para usar no Anki."
         />
         <link rel="stylesheet" href="../style.css" />
 
@@ -38,6 +38,7 @@
                 </a>
                 <div class="nav-links">
                     <a href="../" class="nav-link">[início]</a>
+                    <a href="../memoria/" class="nav-link">[memória]</a>
                     <a href="../baralho/" class="nav-link active">[baralho]</a>
                     <a href="../mapa/" class="nav-link">[mapa]</a>
                     <a href="../sobre/" class="nav-link">[sobre]</a>
@@ -65,10 +66,17 @@
                           <div class="fc-wrap" id="fc-wrap" style="display:none">
                             <div class="fc-scene" onclick="flipCard()" id="fc-scene">
                               <div class="fc-card" id="fc-card">
-                                <div class="fc-face fc-front">
-                                  <span class="fc-label">pergunta</span>
-                                  <p class="fc-text" id="card-q"></p>
-                                  <span class="fc-hint">clique para revelar</span>
+                                  <div class="fc-face fc-front">
+                                      <span class="hex-counter" id="hex-front">[ 0x00 // 0x00 ]</span> <!-- CONTADOR AQUI -->
+                                      <span class="fc-label">pergunta</span>
+                                      <p class="fc-text" id="card-q"></p>
+                                      <span class="fc-hint">clique para revelar</span>
+                                  </div>
+                                  <div class="fc-face fc-back">
+                                      <span class="hex-counter" id="hex-back">[ 0x00 // 0x00 ]</span> <!-- CONTADOR AQUI -->
+                                      <span class="fc-label">resposta</span>
+                                      <p class="fc-text" id="card-a"></p>
+                                  </div>
                                 </div>
                                 <div class="fc-face fc-back">
                                   <span class="fc-label">resposta</span>
@@ -134,5 +142,12 @@
         <script src="trilhas/resumo.js"></script>
         <script src="trilhas/prob_basica.js"></script>
         <script src="app.js"></script>
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg"
+            id="tux-easter-egg"
+            class="tux-easter-egg"
+            alt="Tux"
+        />
+        <script src="trilhas/_base.js"></script>
     </body>
 </html>
