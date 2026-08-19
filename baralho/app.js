@@ -4,8 +4,11 @@ let curUnit = 0;
 let curDay = null;
 let curCard = 0;
 let tuxClicks = 0;
+let heatClicks = 0;
 let flipHeat = 0;
 let isCardBroken = false;
+let heatTimeout = null;
+let cooldownInterval = null;
 
 let doneSet = new Set();
 try {
@@ -239,15 +242,14 @@ function renderCard() {
   }
 }
 
-/* ── Flip card & Tux Easter Egg ──────────────────────── */
+/* ── Flip card, Tux & Heat Mechanics ─────────────────── */
 function flipCard() {
   if (isCardBroken) return;
 
   const card = document.getElementById("fc-card");
-  const scene = document.getElementById("fc-scene");
-
   card.classList.toggle("flipped");
 
+  // ── Easter Egg do Tux ────────────────────────────────
   tuxClicks++;
   if (tuxClicks >= 10) {
     const tux = document.getElementById("tux-easter-egg");
@@ -258,16 +260,101 @@ function flipCard() {
     tuxClicks = 0;
   }
 
-  flipHeat++;
-  const heatIntensity = flipHeat / 20;
+  // ── Interrompe qualquer resfriamento anterior ────────
+  clearTimers();
 
-  if (flipHeat > 0 && flipHeat < 20) {
-    // O filtro é aplicado na scene para evitar a perda do transform-style: preserve-3d no card
-    scene.style.filter = `drop-shadow(0 0 ${15 * heatIntensity}px red) sepia(${heatIntensity}) hue-rotate(-20deg) saturate(${1 + heatIntensity * 3})`;
+  // ═════════════════════════════════════════════════════
+  //  MODO CALOR  (flipHeat > 0)
+  // ═════════════════════════════════════════════════════
+  // Se o card já está quente, TODO click aumenta o calor.
+  // NUNCA contamos clicks base aqui.
+  if (flipHeat > 0) {
+    flipHeat++;
+
+    if (flipHeat >= 20) {
+      shatterCard();
+      resetHeatState();
+      return;
+    }
+
+    updateHeatVisuals();
+    startCooldown();
+    return;
   }
 
-  if (flipHeat >= 20) {
-    shatterCard();
+  // ═════════════════════════════════════════════════════
+  //  MODO BASE  (flipHeat === 0)
+  // ═════════════════════════════════════════════════════
+  // Card está frio. Precisamos de 5 clicks para ativar.
+  heatClicks++;
+
+  if (heatClicks < 5) {
+    // Ainda não ativou. Se parar de clicar por 2s, perde o progresso.
+    heatTimeout = setTimeout(() => {
+      heatClicks = 0;
+    }, 2000);
+    return;
+  }
+
+  // ── 5º click: ativa o modo calor ───────────────────
+  heatClicks = 0;      // zera o contador base
+  flipHeat = 1;        // entra no modo calor
+  updateHeatVisuals();
+  startCooldown();
+}
+
+/* ── Inicia o resfriamento após 0.5s sem clicar ─────── */
+function startCooldown() {
+  heatTimeout = setTimeout(() => {
+    cooldownInterval = setInterval(() => {
+      if (isCardBroken) {
+        clearTimers();
+        return;
+      }
+
+      flipHeat = Math.max(0, flipHeat - 0.1);
+      updateHeatVisuals();
+
+      // Quando esfriar completamente, volta para o modo base
+      if (flipHeat <= 0) {
+        clearTimers();
+        heatClicks = 0; // garante que o modo base recomeça do zero
+      }
+    }, 100);
+  }, 500);
+}
+
+/* ── Limpa timers e evita vazamento ──────────────────── */
+function clearTimers() {
+  clearTimeout(heatTimeout);
+  clearInterval(cooldownInterval);
+  heatTimeout = null;
+  cooldownInterval = null;
+}
+
+/* ── Reseta todo o estado térmico ───────────────────── */
+function resetHeatState() {
+  clearTimers();
+  heatClicks = 0;
+  flipHeat = 0;
+  tuxClicks = 0;
+}
+
+function updateHeatVisuals() {
+  const scene = document.getElementById("fc-scene");
+  if (!scene || isCardBroken) return;
+
+  if (flipHeat <= 0) {
+    scene.style.filter = "none";
+  } else {
+    const heatIntensity = flipHeat / 20;
+
+    scene.style.filter = `
+      drop-shadow(0 0 ${8 * heatIntensity}px rgba(180, 25, 15, ${0.35 * heatIntensity}))
+      sepia(${heatIntensity})
+      hue-rotate(-20deg)
+      saturate(${1 + heatIntensity * 3})
+    `;
   }
 }
 
@@ -303,7 +390,7 @@ function shatterCard() {
 
     requestAnimationFrame(() => {
       shard.style.transform = `translate(${dirX}px, ${dirY}px) rotate(${rot}deg) scale(0.6)`;
-      shard.style.opacity = "0.5";
+      shard.style.opacity = "0";
     });
   }
 }
