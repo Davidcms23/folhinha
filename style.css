@@ -777,6 +777,20 @@ code {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   13.5. SHATTER CARD (Efeito de vidro quebrado)
+   ═══════════════════════════════════════════════════════════════ */
+.glass-shard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    transition: transform 1.2s cubic-bezier(0.1, 0.8, 0.2, 1), opacity 1.2s ease-in;
+    z-index: 999;
+}
+
+/* ═══════════════════════════════════════════════════════════════
    14. ÁREA DE AÇÕES DE CÓPIA (Copiar Frente/Verso, Adicionar ao Anki)
    ═══════════════════════════════════════════════════════════════ */
 .fc-copy {
