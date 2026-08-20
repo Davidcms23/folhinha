@@ -15,14 +15,19 @@ TRILHAS.prob_basica = {
           tag: "uni1_fundamentos",
           cards: [
             {
+              q: "Definição: O que é um evento?",
+              a: "Qualquer subconjunto do espaço amostral",
+              raw: "Qualquer subconjunto do espaço amostral"
+            },
+            {
+              q: "Reconhecimento: \\(A \\cap B^c\\) representa qual situação?",
+              a: "O evento \\(A\\) ocorre, mas o evento \\(B\\) não ocorre",
+              raw: "O evento A ocorre, mas o evento B não ocorre"
+            },
+            {
               q: "Definição de Espaço Amostral \\(\\Omega\\) de um experimento aleatório",
               a: "Conjunto de todos os resultados possíveis do experimento",
               raw: "Conjunto de todos os resultados possíveis do experimento"
-            },
-            {
-              q: "Definição de Evento na teoria das probabilidades",
-              a: "Qualquer subconjunto do espaço amostral",
-              raw: "Qualquer subconjunto do espaço amostral"
             },
             {
               q: "Condição para que dois eventos \\(A\\) e \\(B\\) sejam mutuamente exclusivos",
@@ -33,11 +38,6 @@ TRILHAS.prob_basica = {
               q: "Operação de conjuntos que representa a afirmação verbal: Pelo menos um dos eventos \\(A\\) ou \\(B\\) ocorre",
               a: "\\[A \\cup B\\]",
               raw: "A \\cup B"
-            },
-            {
-              q: "Expressão algébrica para o evento em que ocorre \\(A\\) mas não ocorre \\(B\\)",
-              a: "\\[A \\cap B^c\\]",
-              raw: "A \\cap B^c"
             }
           ]
         },
@@ -69,14 +69,39 @@ TRILHAS.prob_basica = {
           tag: "uni1_axiomas",
           cards: [
             {
-              q: "Primeiro Axioma de Kolmogorov (não-negatividade) para um evento \\(A\\)",
-              a: "\\[0 \\le P(A) \\le 1\\]",
-              raw: "0 \\le P(A) \\le 1"
+              q: "Relação: Se \\(A \\subset B\\), o que podemos afirmar sobre \\(P(A)\\) e \\(P(B)\\)?",
+              a: "\\[P(A) \\le P(B)\\]",
+              raw: "P(A) \\le P(B)"
+            },
+            {
+              q: "Intuição: Por que \\(P(A \\cup B)\\) não é simplesmente \\(P(A) + P(B)\\)?",
+              a: "Porque a interseção \\(A \\cap B\\) seria contada duas vezes caso não fosse subtraída",
+              raw: "Porque a interseção A \\cap B seria contada duas vezes caso não fosse subtraída"
+            },
+            {
+              q: "Aplicação: Um problema apresenta \\(P(A)\\), \\(P(B)\\) e \\(P(A \\cap B)\\). Como calcular \\(P(A \\cup B)\\)?",
+              a: "\\[P(A \\cup B) = P(A) + P(B) - P(A \\cap B)\\]",
+              raw: "P(A \\cup B) = P(A) + P(B) - P(A \\cap B)"
+            },
+            {
+              q: "Erro: Um aluno afirma que \\(P(A \\cup B) = P(A) + P(B)\\) para quaisquer eventos. Onde está o erro?",
+              a: "A igualdade só é válida se os eventos forem mutuamente exclusivos, ou seja, se \\(A \\cap B = \\emptyset\\)",
+              raw: "A igualdade só é válida se os eventos forem mutuamente exclusivos, ou seja, se A \\cap B = \\emptyset"
+            },
+            {
+              q: "Memória: Qual é o primeiro axioma de Kolmogorov (não-negatividade) para um evento \\(A\\)?",
+              a: "\\[P(A) \\ge 0\\]",
+              raw: "P(A) \\ge 0"
             },
             {
               q: "Segundo Axioma de Kolmogorov referente ao espaço amostral \\(\\Omega\\)",
               a: "\\[P(\\Omega) = 1\\]",
               raw: "P(\\Omega) = 1"
+            },
+            {
+              q: "Entendimento: Por que necessariamente \\(P(A) \\le 1\\)?",
+              a: "\\[A \\subset \\Omega \\implies P(A) \\le P(\\Omega) = 1\\]",
+              raw: "A \\subset \\Omega \\implies P(A) \\le P(\\Omega) = 1"
             },
             {
               q: "Terceiro Axioma de Kolmogorov para uma sequência de eventos mutuamente exclusivos \\(E_1, E_2, \\dots\\)",
@@ -89,19 +114,9 @@ TRILHAS.prob_basica = {
               raw: "P(A^c) = 1 - P(A)"
             },
             {
-              q: "Fórmula da probabilidade da união de dois eventos \\(A\\) e \\(B\\)",
-              a: "\\[P(A \\cup B) = P(A) + P(B) - P(A \\cap B)\\]",
-              raw: "P(A \\cup B) = P(A) + P(B) - P(A \\cap B)"
-            },
-            {
               q: "Fórmula da probabilidade da união de três eventos \\(A\\), \\(B\\) e \\(C\\)",
               a: "\\[P(A \\cup B \\cup C) = P(A) + P(B) + P(C) - P(A \\cap B) - P(A \\cap C) - P(B \\cap C) + P(A \\cap B \\cap C)\\]",
               raw: "P(A \\cup B \\cup C) = P(A) + P(B) + P(C) - P(A \\cap B) - P(A \\cap C) - P(B \\cap C) + P(A \\cap B \\cap C)"
-            },
-            {
-              q: "Propriedade da monotonicidade da probabilidade para eventos \\(A\\) e \\(B\\), assumindo que \\(A \\subset B\\)",
-              a: "\\[P(A) \\le P(B)\\]",
-              raw: "P(A) \\le P(B)"
             },
             {
               q: "Limite superior da probabilidade da união de eventos (Desigualdade de Boole)",
@@ -155,6 +170,16 @@ TRILHAS.prob_basica = {
           tag: "uni1_independencia",
           cards: [
             {
+              q: "Contraste: Independência implica que \\(A\\) e \\(B\\) são mutuamente exclusivos?",
+              a: "Não.",
+              raw: "Não."
+            },
+            {
+              q: "Entendimento: Por que independência não implica exclusividade mútua?",
+              a: "Porque exclusividade exige \\(P(A \\cap B) = 0\\), enquanto independência exige \\(P(A \\cap B) = P(A)P(B)\\). Logo, se \\(P(A) > 0\\) e \\(P(B) > 0\\), então \\(P(A \\cap B) > 0\\).",
+              raw: "Porque exclusividade exige P(A \\cap B) = 0, enquanto independência exige P(A \\cap B) = P(A)P(B). Logo, se P(A) > 0 e P(B) > 0, então P(A \\cap B) > 0."
+            },
+            {
               q: "Condição exata para que dois eventos \\(A\\) e \\(B\\) sejam independentes",
               a: "\\[P(A \\cap B) = P(A)P(B)\\]",
               raw: "P(A \\cap B) = P(A)P(B)"
@@ -166,7 +191,7 @@ TRILHAS.prob_basica = {
             },
             {
               q: "Relação de independência entre \\(A\\) e \\(B^c\\) se \\(A\\) e \\(B\\) são independentes",
-              a: "Os eventos A e B^c também são independentes",
+              a: "Os eventos \\(A\\) e \\(B^c\\) também são independentes",
               raw: "Os eventos A e B^c também são independentes"
             },
             {
@@ -200,6 +225,19 @@ TRILHAS.prob_basica = {
               q: "Função densidade de probabilidade da distribuição Uniforme Contínua no intervalo \\((a, b)\\)",
               a: "\\[f(x) = \\frac{1}{b-a} \\mathbb{I}_{[a,b]}(x)\\]",
               raw: "f(x) = \\frac{1}{b-a} \\mathbb{I}_{[a,b]}(x)"
+            }
+          ]
+        },
+        {
+          label: "Distribuição Binomial",
+          topic: "Distribuições Discretas",
+          tag: "uni2_dia1",
+          cards: [
+            {
+              q: "Qual é a variância da Binomial?",
+              a: "\\[np(1 - p)\\]",
+              raw: "np(1 - p)",
+              msg: "Por que a variância diminui quando p se aproxima de 0 ou 1? \\(\\mathcal{N}(\\mu, \\sigma^2)\\)"
             }
           ]
         }

@@ -9,6 +9,7 @@ let flipHeat = 0;
 let isCardBroken = false;
 let heatTimeout = null;
 let cooldownInterval = null;
+let idleTimer = null;
 
 let doneSet = new Set();
 try {
@@ -238,7 +239,15 @@ function renderCard() {
   aEl.innerHTML = card.a;
 
   if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise([qEl, aEl]).catch(() => {});
+    MathJax.typesetPromise([qEl, aEl]).catch(() => { });
+  }
+
+  // Reset da mensagem de inatividade ao trocar de card
+  clearTimeout(idleTimer);
+  const cyberMsg = document.getElementById("cyber-msg");
+  if (cyberMsg) {
+    cyberMsg.classList.remove("active");
+    cyberMsg.textContent = "";
   }
 }
 
@@ -248,6 +257,31 @@ function flipCard() {
 
   const card = document.getElementById("fc-card");
   card.classList.toggle("flipped");
+
+  // ── Easter Egg da Mensagem Cyber (Idle) ──────────────
+  clearTimeout(idleTimer);
+  const cyberMsg = document.getElementById("cyber-msg");
+
+  if (cyberMsg) {
+    cyberMsg.classList.remove("active");
+
+    if (card.classList.contains("flipped")) {
+      const currentCard = getUnit().days[curDay].cards[curCard];
+
+      if (currentCard.msg) {
+        // Dispara após 4 segundos
+        idleTimer = setTimeout(() => {
+          cyberMsg.innerHTML = `>_ ${currentCard.msg}`;
+          cyberMsg.classList.add("active");
+
+          // Avisa o MathJax para renderizar o LaTeX da mensagem
+          if (window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([cyberMsg]).catch(() => {});
+          }
+        }, 2000);
+      }
+    }
+  }
 
   // ── Easter Egg do Tux ────────────────────────────────
   tuxClicks++;
@@ -266,8 +300,6 @@ function flipCard() {
   // ═════════════════════════════════════════════════════
   //  MODO CALOR  (flipHeat > 0)
   // ═════════════════════════════════════════════════════
-  // Se o card já está quente, TODO click aumenta o calor.
-  // NUNCA contamos clicks base aqui.
   if (flipHeat > 0) {
     flipHeat++;
 
@@ -285,11 +317,9 @@ function flipCard() {
   // ═════════════════════════════════════════════════════
   //  MODO BASE  (flipHeat === 0)
   // ═════════════════════════════════════════════════════
-  // Card está frio. Precisamos de 5 clicks para ativar.
   heatClicks++;
 
   if (heatClicks < 5) {
-    // Ainda não ativou. Se parar de clicar por 2s, perde o progresso.
     heatTimeout = setTimeout(() => {
       heatClicks = 0;
     }, 2000);
@@ -297,8 +327,8 @@ function flipCard() {
   }
 
   // ── 5º click: ativa o modo calor ───────────────────
-  heatClicks = 0;      // zera o contador base
-  flipHeat = 1;        // entra no modo calor
+  heatClicks = 0;
+  flipHeat = 1;
   updateHeatVisuals();
   startCooldown();
 }
@@ -315,10 +345,9 @@ function startCooldown() {
       flipHeat = Math.max(0, flipHeat - 0.1);
       updateHeatVisuals();
 
-      // Quando esfriar completamente, volta para o modo base
       if (flipHeat <= 0) {
         clearTimers();
-        heatClicks = 0; // garante que o modo base recomeça do zero
+        heatClicks = 0;
       }
     }, 100);
   }, 500);
@@ -364,8 +393,6 @@ function shatterCard() {
   const card = document.getElementById("fc-card");
 
   card.style.display = "none";
-
-  // Libera o overflow para permitir que os fragmentos ultrapassem as bordas do contêiner
   scene.style.overflow = "visible";
 
   const numShards = 30;
@@ -395,7 +422,11 @@ function shatterCard() {
   }
 }
 
-setTimeout(() => tux.classList.remove("peek"), 2000);
+// Limpeza avulsa que estava no escopo global (agora protegida)
+const tux = document.getElementById("tux-easter-egg");
+if (tux) {
+    setTimeout(() => tux.classList.remove("peek"), 2000);
+}
 
 /* ── Copy helpers ────────────────────────────────────── */
 function stripHtml(html) {

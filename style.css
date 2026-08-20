@@ -641,6 +641,34 @@ code {
     mix-blend-mode: screen;
 }
 
+/* ── Cyber Message (Idle Timeout) ────────────── */
+.cyber-msg {
+    display: none;
+    position: absolute;
+    bottom: 24px;
+    width: 85%;
+    text-align: center;
+    font-size: 12px;
+    color: var(--green);
+    font-family: var(--mono);
+    border-top: 0.5px dashed var(--border-md);
+    padding-top: 14px;
+    opacity: 0;
+    text-shadow: 0 0 5px rgba(107, 227, 168, 0.4);
+}
+
+.cyber-msg.active {
+    display: block;
+    /* Efeito de glitch/step para aparecer abruptamente */
+    animation: terminal-reveal 0.4s steps(4, end) forwards;
+}
+
+@keyframes terminal-reveal {
+    0% { opacity: 0; transform: scale(0.98); filter: grayscale(100%); }
+    50% { opacity: 0.5; filter: contrast(200%); }
+    100% { opacity: 1; transform: scale(1); filter: none; }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    13. GLITCH — Animações (cards e botões)
    ═══════════════════════════════════════════════════════════════ */
