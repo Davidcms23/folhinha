@@ -1,7 +1,7 @@
-/* ─────────────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════════════════════
  * Trilha: Probabilidade Básica
  * Trilha para a disciplina de Probabilidade básica I
- * ───────────────────────────────────────────────────────── */
+ * ═══════════════════════════════════════════════════════════════════════════════ */
 
 TRILHAS.prob_basica = {
   label: "Probabilidade Básica I",
@@ -48,7 +48,7 @@ TRILHAS.prob_basica = {
           cards: [
             {
               q: "Três propriedades definidoras de uma \\(\\sigma\\)-álgebra \\(\\mathcal{F}\\) sobre um espaço amostral \\(\\Omega\\)",
-              a: "\\[\\Omega \\in \\mathcal{F}; \\text{ se } A \\in \\mathcal{F}, \\text{ então } A^c \\in \\mathcal{F}; \\text{ se } A_1, A_2, \\dots \\in \\mathcal{F}, \\text{ então } \\bigcup_{i=1}^{\\infty} A_i \\in \\mathcal{F}\\]",
+              a: "\\[\\begin{aligned} 1.& \\; \\Omega \\in \\mathcal{F} \\\\[2pt] 2.& \\; \\text{se } A \\in \\mathcal{F} \\implies A^c \\in \\mathcal{F} \\\\[2pt] 3.& \\; \\text{se } A_1, A_2, \\dots \\in \\mathcal{F} \\implies \\bigcup_{i=1}^{\\infty} A_i \\in \\mathcal{F} \\end{aligned}\\]",
               raw: "\\Omega \\in \\mathcal{F}; \\text{ se } A \\in \\mathcal{F}, \\text{ então } A^c \\in \\mathcal{F}; \\text{ se } A_1, A_2, \\dots \\in \\mathcal{F}, \\text{ então } \\bigcup_{i=1}^{\\infty} A_i \\in \\mathcal{F}"
             },
             {
@@ -115,7 +115,7 @@ TRILHAS.prob_basica = {
             },
             {
               q: "Fórmula da probabilidade da união de três eventos \\(A\\), \\(B\\) e \\(C\\)",
-              a: "\\[P(A \\cup B \\cup C) = P(A) + P(B) + P(C) - P(A \\cap B) - P(A \\cap C) - P(B \\cap C) + P(A \\cap B \\cap C)\\]",
+              a: "\\[\\begin{aligned} P(A \\cup B \\cup C) = & \\; P(A) + P(B) + P(C) - P(A \\cap B) \\\\[2pt] & - P(A \\cap C) - P(B \\cap C) + P(A \\cap B \\cap C) \\end{aligned}\\]",
               raw: "P(A \\cup B \\cup C) = P(A) + P(B) + P(C) - P(A \\cap B) - P(A \\cap C) - P(B \\cap C) + P(A \\cap B \\cap C)"
             },
             {
@@ -137,7 +137,7 @@ TRILHAS.prob_basica = {
             },
             {
               q: "Teorema do Produto (Regra da Multiplicação) para \\(n\\) eventos \\(E_1, E_2, \\dots, E_n\\)",
-              a: "\\[P(E_1 E_2 \\dots E_n) = P(E_1)P(E_2|E_1)P(E_3|E_1 E_2) \\dots P(E_n|E_1 \\dots E_{n-1})\\]",
+              a: "\\[\\begin{aligned} P(E_1 E_2 \\dots E_n) = & P(E_1)P(E_2|E_1)P(E_3|E_1 E_2) \\dots \\\\[2pt] & P(E_n|E_1 \\dots E_{n-1}) \\end{aligned}\\]",
               raw: "P(E_1 E_2 \\dots E_n) = P(E_1)P(E_2|E_1)P(E_3|E_1 E_2) \\dots P(E_n|E_1 \\dots E_{n-1})"
             }
           ]
@@ -196,7 +196,7 @@ TRILHAS.prob_basica = {
             },
             {
               q: "As quatro condições matemáticas para a independência mútua de três eventos \\(E\\), \\(F\\) e \\(G\\)",
-              a: "\\[P(EF) = P(E)P(F), P(EG) = P(E)P(G), P(FG) = P(F)P(G) \\text{ e } P(EFG) = P(E)P(F)P(G)\\]",
+              a: "\\[\\begin{aligned} P(EF) &= P(E)P(F) \\\\[2pt] P(EG) &= P(E)P(G) \\\\[2pt] P(FG) &= P(F)P(G) \\\\[2pt] P(EFG) &= P(E)P(F)P(G) \\end{aligned}\\]",
               raw: "P(EF) = P(E)P(F), P(EG) = P(E)P(G), P(FG) = P(F)P(G) \\text{ e } P(EFG) = P(E)P(F)P(G)"
             },
             {

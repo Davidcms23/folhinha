@@ -63,67 +63,61 @@
             ></div>
 
             <section class="panel" id="panel" aria-live="polite">
-                          <div class="fc-wrap" id="fc-wrap" style="display:none">
-                            <div class="fc-scene" onclick="flipCard()" id="fc-scene">
-                              <div class="fc-card" id="fc-card">
-                                  <div class="fc-face fc-front">
-                                      <span class="hex-counter" id="hex-front">[ 0x00 // 0x00 ]</span> <!-- CONTADOR AQUI -->
-                                      <span class="fc-label">pergunta</span>
-                                      <p class="fc-text" id="card-q"></p>
-                                      <span class="fc-hint">clique para revelar</span>
-                                  </div>
-                                  <div class="fc-face fc-back">
-                                      <span class="hex-counter" id="hex-back">[ 0x00 // 0x00 ]</span> <!-- CONTADOR AQUI -->
-                                      <span class="fc-label">resposta</span>
-                                      <p class="fc-text" id="card-a"></p>
-
-                                      <div id="cyber-msg" class="cyber-msg"></div>
-                                  </div>
-                                </div>
-                                <div class="fc-face fc-back">
-                                  <span class="fc-label">resposta</span>
-                                  <p class="fc-text" id="card-a"></p>
-                                </div>
-                              </div>
+                <div class="fc-wrap" id="fc-wrap" style="display:none">
+                    <div class="fc-scene" onclick="flipCard()" id="fc-scene">
+                        <div class="fc-card" id="fc-card">
+                            <div class="fc-face fc-front">
+                                <span class="hex-counter" id="hex-front">[ 0x00 // 0x00 ]</span>
+                                <span class="fc-label">pergunta</span>
+                                <p class="fc-text" id="card-q"></p>
+                                <span class="fc-hint">clique para revelar</span>
                             </div>
-
-                            <div class="fc-nav">
-                              <button onclick="prevCard()" aria-label="Card anterior">&#8249;</button>
-                              <span class="fc-counter" id="card-counter"></span>
-                              <button onclick="nextCard()" aria-label="Próximo card">&#8250;</button>
+                            <div class="fc-face fc-back">
+                                <span class="hex-counter" id="hex-back">[ 0x00 // 0x00 ]</span>
+                                <span class="fc-label">resposta</span>
+                                <p class="fc-text" id="card-a"></p>
+                                <div id="cyber-msg" class="cyber-msg"></div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="fc-copy">
-                              <button class="copy-btn" id="btn-copy-front" onclick="copyFront(this)">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                Copiar Frente
-                              </button>
-                              <button class="copy-btn" id="btn-anki-add" onclick="addToAnki(this)">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                                Adicionar ao Anki
-                              </button>
-                              <button class="copy-btn" id="btn-copy-back" onclick="copyBack(this)">
-                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                                Copiar Verso
-                              </button>
-                            </div>
-                          </div>
-                        </section>
+                    <div class="fc-nav">
+                        <button onclick="prevCard()" aria-label="Card anterior">&#8249;</button>
+                        <span class="fc-counter" id="card-counter"></span>
+                        <button onclick="nextCard()" aria-label="Próximo card">&#8250;</button>
+                    </div>
+
+                    <div class="fc-copy">
+                        <button class="copy-btn" id="btn-copy-front" onclick="copyFront(this)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            Copiar Frente
+                        </button>
+                        <button class="copy-btn" id="btn-anki-add" onclick="addToAnki(this)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Adicionar ao Anki
+                        </button>
+                        <button class="copy-btn" id="btn-copy-back" onclick="copyBack(this)">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            Copiar Verso
+                        </button>
+                    </div>
+                </div>
+            </section>
 
             <!-- Empty state -->
             <div class="empty-state" id="empty-state" role="status">
-              Clique em um dia para ver os cards
+                Clique em um dia para ver os cards
             </div>
 
             <div class="anki-tip">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12.01" y2="8"/>
-              </svg>
-              <p>
-                Às vezes o Anki não renderiza o LaTeX automaticamente. Nesses casos, apague os delimitadores <code>\[</code> e <code>\]</code>, selecione o texto em LaTeX e aperte <kbd>Ctrl</kbd>+<kbd>M</kbd>+<kbd>M</kbd> (fórmula em texto) ou <kbd>Ctrl</kbd>+<kbd>M</kbd>+<kbd>E</kbd> (fórmula destacada).
-              </p>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                </svg>
+                <p>
+                    Às vezes o Anki não renderiza o LaTeX automaticamente. Nesses casos, apague os delimitadores <code>\[</code> e <code>\]</code>, selecione o texto em LaTeX e aperte <kbd>Ctrl</kbd>+<kbd>M</kbd>+<kbd>M</kbd> (fórmula em texto) ou <kbd>Ctrl</kbd>+<kbd>M</kbd>+<kbd>E</kbd> (fórmula destacada).
+                </p>
             </div>
         </main>
 
@@ -141,8 +135,8 @@
         </footer>
 
         <script src="trilhas/base.js"></script>
-        <script src="trilhas/resumo.js"></script>
         <script src="trilhas/prob_basica.js"></script>
+        <script src="trilhas/resumo.js"></script>
         <script src="app.js"></script>
         <img src="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" id="tux-easter-egg" class="tux-easter-egg" alt="Tux">
     </body>

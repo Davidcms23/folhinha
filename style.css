@@ -390,7 +390,8 @@ code {
 }
 
 .day-cell:hover {
-    border-color: var(--accent);\n    background: var(--accent-bg);
+    border-color: var(--accent);
+    background: var(--accent-bg);
 }
 
 .day-cell.active {
@@ -512,7 +513,7 @@ code {
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    12. FLASHCARDS — Lógica de Flip 3D (fc-scene → fc-card → fc-face)
-   -----------------------------------------------------------------
+   ─────────────────────────────────────────────────────────────────
    ⚠️ CORREÇÃO DO BUG DE ESPELHAMENTO:
    `border-radius` + `overflow: hidden` NÃO podem ficar no mesmo
    elemento que tem `backface-visibility: hidden` e é rotacionado
@@ -523,7 +524,7 @@ code {
    .fc-card (filho dele) gira em 3D.
    ═══════════════════════════════════════════════════════════════════════════════ */
 .fc-scene {
-    width: min(92vw, 480px);
+    width: min(94vw, 520px);
     height: 260px;
     perspective: 1200px;
     cursor: pointer;
@@ -561,7 +562,7 @@ code {
     align-items: center;
     justify-content: center;
 
-    padding: 2rem;
+    padding: 1.5rem 1.25rem;
     box-sizing: border-box;
 
     background: var(--surface);
@@ -603,14 +604,16 @@ code {
 }
 
 .fc-text {
-    font-size: 15.5px;
+    font-size: 15px;
     font-weight: 500;
     color: var(--text);
     text-align: center;
-    line-height: 1.6;
+    line-height: 1.65;
     max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
+    overflow-wrap: break-word;
+    word-break: normal;
 }
 
 .fc-text::-webkit-scrollbar,
@@ -957,6 +960,11 @@ mjx-container {
     overflow-x: auto;
     max-width: 100%;
     color: var(--text);
+}
+
+.fc-text mjx-container[jax="CHTML"] {
+    white-space: normal;
+    text-align: center;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
