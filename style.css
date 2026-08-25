@@ -1090,3 +1090,114 @@ blockquote p:not(:last-child) {
     border-left: 1.5px dashed var(--border-md);
     padding-left: 14px;
 }
+
+/* --- BARRA DE PESQUISA, LUPA E AUTOCOMPLETE --- */
+.search-container {
+    position: fixed;
+    top: 70px;
+    left: 20px;
+    z-index: 20;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-family: monospace;
+}
+
+#search-toggle {
+    background: rgba(13, 17, 23, 0.75);
+    border: 1px solid rgba(48, 54, 61, 0.8);
+    border-radius: 6px;
+    color: #c9d1d9;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+}
+
+#search-toggle:hover {
+    border-color: #58a6ff;
+    color: #58a6ff;
+    box-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
+}
+
+.search-wrapper {
+    position: relative;
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
+}
+
+.search-wrapper.open {
+    width: 250px;
+    opacity: 1;
+    overflow: visible;
+}
+
+#search-input {
+    width: 100%;
+    padding: 0 14px;
+    background: rgba(13, 17, 23, 0.75);
+    border: 1px solid rgba(48, 54, 61, 0.8);
+    border-radius: 6px;
+    color: #c9d1d9;
+    font-size: 14px;
+    outline: none;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    height: 40px;
+}
+
+#search-input:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 8px rgba(88, 166, 255, 0.3);
+}
+
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 4px;
+    margin-bottom: 0;
+    background: rgba(13, 17, 23, 0.95);
+    border: 1px solid rgba(48, 54, 61, 0.8);
+    border-radius: 6px;
+    list-style: none;
+    padding: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    backdrop-filter: blur(15px);
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.autocomplete-list li {
+    padding: 10px 14px;
+    color: #c9d1d9;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.autocomplete-list li:hover {
+    background: rgba(88, 166, 255, 0.15);
+    color: #58a6ff;
+}
+
+.autocomplete-list li strong {
+    color: #58a6ff;
+    font-weight: bold;
+}
+
+/* --- CLASSE DE BRILHO PARA O NÓ (GLOW) --- */
+.node circle.glowing {
+    filter: drop-shadow(0 0 12px #58a6ff) brightness(1.5);
+    stroke: #ffffff;
+    stroke-width: 2.5px;
+}

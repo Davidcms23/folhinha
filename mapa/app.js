@@ -89,8 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const grau = {};
     data.nodes.forEach(n => grau[n.id] = 0);
     data.links.forEach(l => {
-        grau[l.source] += 1;
-        grau[l.target] += 1;
+        if (grau[l.source] !== undefined) grau[l.source] += 1;
+        if (grau[l.target] !== undefined) grau[l.target] += 1;
     });
 
     let width = window.innerWidth;
@@ -101,17 +101,38 @@ document.addEventListener("DOMContentLoaded", () => {
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("viewBox", [0, 0, width, height])
-        .call(d3.zoom().on("zoom", (event) => {
-            svgGroup.attr("transform", event.transform);
-        }))
         .on("dblclick.zoom", null);
 
     const svgGroup = svg.append("g");
+
+    const zoomBehavior = d3.zoom().on("zoom", (event) => {
+        svgGroup.attr("transform", event.transform);
+    });
+
+    svg.call(zoomBehavior);
 
     const simulation = d3.forceSimulation(data.nodes)
         .force("link", d3.forceLink(data.links).id(d => d.id).distance(280))
         .force("charge", d3.forceManyBody().strength(-900))
         .force("center", d3.forceCenter(width / 2, (height / 2) + 40));
+
+    // Funções de arrastar os nós (D3 Drag)
+    function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+    }
+
+    function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+    }
+
+    function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+    }
 
     let resizeTimer = null;
     window.addEventListener("resize", () => {
@@ -154,21 +175,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const tooltip = d3.select("#tooltip");
     let noFixado = null;
 
+    function getLinkId(endpoint) {
+        return (typeof endpoint === "object" && endpoint !== null) ? endpoint.id : endpoint;
+    }
+
     function focarNo(d) {
         const vizinhos = new Set();
         vizinhos.add(d.id);
         data.links.forEach(l => {
-            if (l.source.id === d.id || l.target.id === d.id) {
-                vizinhos.add(l.source.id);
-                vizinhos.add(l.target.id);
+            const sId = getLinkId(l.source);
+            const tId = getLinkId(l.target);
+            if (sId === d.id || tId === d.id) {
+                vizinhos.add(sId);
+                vizinhos.add(tId);
             }
         });
 
         nodesUI.style("opacity", n => vizinhos.has(n.id) ? 1 : 0.1);
-        linkBase.style("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.1);
-        linkTether.style("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.4 : 0.05);
-        svgGroup.selectAll(".foreign-label").style("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.1);
-        linkEnergy.style("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 1 : 0);
+        linkBase.style("opacity", l => (getLinkId(l.source) === d.id || getLinkId(l.target) === d.id) ? 1 : 0.1);
+        linkTether.style("opacity", l => (getLinkId(l.source) === d.id || getLinkId(l.target) === d.id) ? 0.4 : 0.05);
+        svgGroup.selectAll(".foreign-label").style("opacity", l => (getLinkId(l.source) === d.id || getLinkId(l.target) === d.id) ? 1 : 0.1);
+        linkEnergy.style("opacity", l => (getLinkId(l.source) === d.id || getLinkId(l.target) === d.id) ? 1 : 0);
+
+        nodesUI.selectAll("circle").classed("glowing", false);
+        nodesUI.filter(n => n.id === d.id).select("circle").classed("glowing", true);
     }
 
     function limparFoco() {
@@ -177,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
         linkTether.style("opacity", 0.4);
         svgGroup.selectAll(".foreign-label").style("opacity", 1);
         linkEnergy.style("opacity", 0);
+        nodesUI.selectAll("circle").classed("glowing", false);
     }
 
     function exibirTooltip(event, d) {
@@ -308,15 +339,121 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("load", tipografarGrafo);
     }
 
-    function dragstarted(event, d) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x; d.fy = d.y;
+    // --- SISTEMA DE PESQUISA, TOGGLE E CENTRALIZAÇÃO DE CÂMERA ---
+    const searchToggle = document.getElementById("search-toggle");
+    const searchWrapper = document.getElementById("search-wrapper");
+    const searchInput = document.getElementById("search-input");
+    const autocompleteList = document.getElementById("autocomplete-list");
+
+    function normalizeStr(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     }
-    function dragged(event, d) {
-        d.fx = event.x; d.fy = event.y;
+
+    if (searchToggle && searchWrapper && searchInput) {
+        // Abre/Fecha a barra ao clicar na lupa
+        searchToggle.addEventListener("click", (e) => {
+            e.stopPropagation();
+            searchWrapper.classList.toggle("open");
+            if (searchWrapper.classList.contains("open")) {
+                searchInput.focus();
+            } else {
+                searchInput.value = "";
+                autocompleteList.style.display = "none";
+            }
+        });
+
+        searchWrapper.addEventListener("click", (e) => {
+            e.stopPropagation();
+        });
+
+        // Motor do autocomplete inteligente
+        searchInput.addEventListener("input", function() {
+            const rawVal = this.value.trim();
+            const val = normalizeStr(rawVal);
+            autocompleteList.innerHTML = "";
+
+            if (!val) {
+                autocompleteList.style.display = "none";
+                return;
+            }
+
+            const matches = data.nodes.filter(n => normalizeStr(n.id).includes(val));
+
+            if (matches.length > 0) {
+                autocompleteList.style.display = "block";
+                matches.forEach(match => {
+                    const li = document.createElement("li");
+                    const normMatch = normalizeStr(match.id);
+                    const idx = normMatch.indexOf(val);
+
+                    if (idx !== -1) {
+                        const before = match.id.slice(0, idx);
+                        const matchPart = match.id.slice(idx, idx + rawVal.length);
+                        const after = match.id.slice(idx + rawVal.length);
+                        li.innerHTML = `${before}<strong>${matchPart}</strong>${after}`;
+                    } else {
+                        li.textContent = match.id;
+                    }
+
+                    li.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        searchInput.value = match.id;
+                        autocompleteList.style.display = "none";
+                        acionarPesquisaGrafica(match);
+                    });
+
+                    autocompleteList.appendChild(li);
+                });
+            } else {
+                autocompleteList.style.display = "none";
+            }
+        });
+
+        // Pressionar Enter no campo de busca
+        searchInput.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const rawVal = this.value.trim();
+                const val = normalizeStr(rawVal);
+                if (!val) return;
+
+                const exact = data.nodes.find(n => normalizeStr(n.id) === val);
+                const first = exact || data.nodes.find(n => normalizeStr(n.id).includes(val));
+
+                if (first) {
+                    searchInput.value = first.id;
+                    autocompleteList.style.display = "none";
+                    acionarPesquisaGrafica(first);
+                }
+            } else if (e.key === "Escape") {
+                autocompleteList.style.display = "none";
+                searchWrapper.classList.remove("open");
+                searchInput.blur();
+            }
+        });
+
+        // Fecha a lista ao clicar fora
+        document.addEventListener("click", (e) => {
+            if (e.target !== searchInput && e.target !== searchToggle && !searchToggle.contains(e.target)) {
+                autocompleteList.style.display = "none";
+            }
+        });
     }
-    function dragended(event, d) {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null; d.fy = null;
+
+    function acionarPesquisaGrafica(d) {
+        noFixado = d.id;
+        focarNo(d);
+
+        if (typeof abrirPainelLateral === "function") {
+            abrirPainelLateral(d);
+        }
+
+        const scale = 1.3;
+        const x = width / 2 - (d.x !== undefined ? d.x : width / 2) * scale;
+        const y = height / 2 - (d.y !== undefined ? d.y : height / 2) * scale;
+
+        svg.transition()
+            .duration(800)
+            .call(zoomBehavior.transform, d3.zoomIdentity.translate(x, y).scale(scale));
     }
 });

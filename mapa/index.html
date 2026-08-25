@@ -38,11 +38,14 @@
 
             .node { transition: opacity 0.3s ease; }
 
+            .node circle {
+                transition: fill 0.25s ease, stroke 0.25s ease, filter 0.25s ease;
+            }
+
             .node circle.circle-continua {
                 fill: #58a6ff;
                 stroke: #c9d1d9;
                 stroke-width: 1.5px;
-                transition: fill 0.2s, filter 0.2s;
                 cursor: pointer;
             }
             .node circle.circle-continua:hover {
@@ -54,12 +57,28 @@
                 fill: #3fb950;
                 stroke: #c9d1d9;
                 stroke-width: 1.5px;
-                transition: fill 0.2s, filter 0.2s;
                 cursor: pointer;
             }
             .node circle.circle-discreta:hover {
                 fill: #56d364;
                 filter: drop-shadow(0 0 8px #3fb950);
+            }
+
+            /* --- ESTADO ILUMINADO (AO CLICAR OU PESQUISAR) --- */
+            .node circle.glowing {
+                stroke: #bfeaff !important;
+                stroke-width: 2px !important;
+                filter: drop-shadow(0 0 5px rgba(99, 212, 255, 0.7)) drop-shadow(0 0 12px rgba(88, 166, 255, 0.35)) !important;
+            }
+
+            .node circle.circle-continua.glowing {
+                fill: #85cdff !important;
+            }
+
+            .node circle.circle-discreta.glowing {
+                fill: #56d364 !important;
+                stroke: #bfeaff !important;
+                filter: drop-shadow(0 0 5px rgba(99, 212, 255, 0.7)) drop-shadow(0 0 12px rgba(88, 166, 255, 0.35)) !important;
             }
 
             .node text {
@@ -295,6 +314,19 @@
             </div>
         </nav>
 
+        <div class="search-container">
+            <button id="search-toggle" aria-label="Pesquisar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+            <div id="search-wrapper" class="search-wrapper">
+                <input type="text" id="search-input" placeholder="Pesquisar distribuição..." autocomplete="off" />
+                <ul id="autocomplete-list" class="autocomplete-list"></ul>
+            </div>
+        </div>
+
         <div class="map-container" id="grafo"></div>
         <div id="tooltip" class="tooltip"></div>
 
@@ -309,10 +341,10 @@
             </div>
         </aside>
 
-        <!-- O "?v=2" quebra o cache local e obriga o navegador a ler seu código novo -->
+        <!-- Scripts -->
         <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-        <script src="plot.js?v=2" defer></script>
-        <script src="painel.js?v=2" defer></script>
-        <script src="app.js?v=2" defer></script>
+        <script src="plot.js?v=5" defer></script>
+        <script src="painel.js?v=5" defer></script>
+        <script src="app.js?v=5" defer></script>
     </body>
 </html>
