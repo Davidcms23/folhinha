@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>folhinha::teste</title>
+        <meta
+            name="description"
+            content="Quiz de múltipla escolha por disciplina e unidade."
+        />
+        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="quiz.css" />
+
+        <!-- MathJax -->
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [["\\(", "\\)"]],
+                    displayMath: [["\\[", "\\]"]],
+                },
+                startup: {
+                    ready() {
+                        MathJax.startup.defaultReady();
+                    },
+                },
+            };
+        </script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+            defer
+        ></script>
+    </head>
+    <body>
+        <!-- ── Navbar ───────────────────────────────── -->
+        <nav class="navbar" role="navigation" aria-label="Principal">
+            <div class="navbar-inner">
+                <a href="../" class="nav-brand">
+                    <span class="prompt">~/folhinha</span>
+                </a>
+                <div class="nav-links">
+                    <a href="../" class="nav-link">[início]</a>
+                    <a href="../memoria/" class="nav-link">[memória]</a>
+                    <a href="../baralho/" class="nav-link">[baralho]</a>
+                    <a href="../mapa/" class="nav-link">[mapa]</a>
+                    <a href="../teste/" class="nav-link active">[teste]</a>
+                    <a href="../sobre/" class="nav-link">[sobre]</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ── Main ─────────────────────────────────── -->
+        <main class="main">
+            <p class="breadcrumb">~/folhinha/teste$ ./quiz.sh</p>
+            <h1 class="page-title">Quiz</h1>
+
+            <!-- ── Filtros ──────────────────────────── -->
+            <div id="filtros-wrap">
+                <div class="filtro-group">
+                    <div class="filtro-label">Disciplina</div>
+                    <div class="filtro-options" id="filtro-disciplinas"></div>
+                </div>
+
+                <div class="filtro-group" id="unidades-group" style="display:none">
+                    <div class="filtro-label">Unidade</div>
+                    <div class="filtro-options" id="filtro-unidades"></div>
+                </div>
+
+                <button class="btn-iniciar" id="btn-iniciar" onclick="iniciarQuiz()" disabled>
+                    Iniciar quiz
+                </button>
+            </div>
+
+            <!-- ── Painel da pergunta ───────────────── -->
+            <section class="quiz-panel" id="quiz-panel">
+                <div class="quiz-meta">
+                    <span id="quiz-disciplina-label"></span>
+                    <span id="quiz-contador"></span>
+                </div>
+
+                <div class="quiz-pergunta" id="quiz-pergunta-texto"></div>
+
+                <div class="quiz-opcoes" id="quiz-opcoes"></div>
+
+                <div class="quiz-feedback" id="quiz-feedback"></div>
+
+                <div class="quiz-nav" id="quiz-nav" style="display:none">
+                    <button class="btn-iniciar" onclick="proximaPergunta()">
+                        Próxima »
+                    </button>
+                </div>
+            </section>
+
+            <!-- ── Resultado ────────────────────────── -->
+            <section class="quiz-resultado" id="quiz-resultado">
+                <div class="score" id="quiz-score"></div>
+                <p>acertos</p>
+                <button class="btn-iniciar" onclick="refazerFiltros()" style="margin-top:20px">
+                    Refazer filtros
+                </button>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <p>
+                folhinha ·
+                <a href="https://github.com/Davidcms23/folhinha"
+                   target="_blank"
+                   rel="noopener noreferrer">GitHub</a>
+                ·
+                <a href="https://davidcms23.github.io/"
+                   target="_blank"
+                   rel="noopener noreferrer">Christian D. Martins</a>
+            </p>
+        </footer>
+
+        <script src="tags.js"></script>
+        <script src="questoes/prob_basica.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
