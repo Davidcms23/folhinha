@@ -31,7 +31,7 @@
         ></script>
     </head>
     <body>
-        <!-- ── Navbar ───────────────────────────────── -->
+        <!-- ── Navbar ────────────────────────────────── -->
         <nav class="navbar" role="navigation" aria-label="Principal">
             <div class="navbar-inner">
                 <a href="../" class="nav-brand">
@@ -50,10 +50,27 @@
 
         <!-- ── Main ─────────────────────────────────── -->
         <main class="main">
-            <p class="breadcrumb">~/folhinha/teste$ ./quiz.sh</p>
-            <h1 class="page-title">Quiz</h1>
+            <p class="breadcrumb">~/folhinha/teste$ ./teste.sh</p>
+            <h1 class="page-title">Teste</h1>
 
-            <!-- ── Filtros ──────────────────────────── -->
+            <!-- ── Recordes (top 3, localStorage) ──────── -->
+            <div class="top3-wrap" id="top3-wrap" style="display:none">
+                <div class="filtro-label">Recordes locais</div>
+                <table class="top3-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Pontos</th>
+                            <th>Acertos</th>
+                            <th>Disciplinas</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top3-body"></tbody>
+                </table>
+            </div>
+
+            <!-- ── Filtros ─────────────────────────────── -->
             <div id="filtros-wrap">
                 <div class="filtro-group">
                     <div class="filtro-label">Disciplina</div>
@@ -65,16 +82,34 @@
                     <div class="filtro-options" id="filtro-unidades"></div>
                 </div>
 
+                <div class="filtro-group" id="config-group" style="display:none">
+                    <div class="filtro-label">Quantidade de questões</div>
+                    <div class="config-qtd-row">
+                        <input
+                            type="number"
+                            id="input-qtd-questoes"
+                            class="input-qtd"
+                            min="1"
+                            oninput="onQtdQuestoesChange(this.value)"
+                        />
+                        <span class="qtd-hint" id="qtd-questoes-hint"></span>
+                    </div>
+                </div>
+
                 <button class="btn-iniciar" id="btn-iniciar" onclick="iniciarQuiz()" disabled>
-                    Iniciar quiz
+                    Iniciar teste
                 </button>
             </div>
 
-            <!-- ── Painel da pergunta ───────────────── -->
+            <!-- ── Painel da pergunta ────────────────── -->
             <section class="quiz-panel" id="quiz-panel">
                 <div class="quiz-meta">
                     <span id="quiz-disciplina-label"></span>
-                    <span id="quiz-contador"></span>
+                    <span class="quiz-meta-right">
+                        <span class="quiz-combo" id="quiz-combo"></span>
+                        <span class="quiz-pontos" id="quiz-pontos">0 pts</span>
+                        <span id="quiz-contador"></span>
+                    </span>
                 </div>
 
                 <div class="quiz-pergunta" id="quiz-pergunta-texto"></div>
@@ -83,19 +118,19 @@
 
                 <div class="quiz-feedback" id="quiz-feedback"></div>
 
-                <div class="quiz-nav" id="quiz-nav" style="display:none">
-                    <button class="btn-iniciar" onclick="proximaPergunta()">
-                        Próxima »
+                <div class="quiz-action-wrap">
+                    <button class="btn-iniciar btn-acao-quiz" id="btn-acao-quiz" onclick="executarAcaoPrincipal()" disabled>
+                        Confirmar <kbd class="kbd-hint">↵ Enter</kbd>
                     </button>
                 </div>
             </section>
 
-            <!-- ── Resultado ────────────────────────── -->
+            <!-- ── Resultado ─────────────────────────── -->
             <section class="quiz-resultado" id="quiz-resultado">
                 <div class="score" id="quiz-score"></div>
-                <p>acertos</p>
+                <p id="quiz-score-detalhe"></p>
                 <button class="btn-iniciar" onclick="refazerFiltros()" style="margin-top:20px">
-                    Refazer filtros
+                    Refazer filtros <kbd class="kbd-hint">↵ Enter</kbd>
                 </button>
             </section>
         </main>
